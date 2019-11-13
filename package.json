@@ -1,0 +1,38 @@
+{
+  "name": "yahtzee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production",
+    "live": "webpack-dev-server --inline --hot"
+  },
+  "browserslist": [
+    "last 1 version",
+    "> 1%"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pavkrol/yahtzee.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pavkrol/yahtzee/issues"
+  },
+  "homepage": "https://github.com/pavkrol/yahtzee#readme",
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "dependencies": {
+    "@babel/preset-react": "^7.7.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0"
+  }
+}
