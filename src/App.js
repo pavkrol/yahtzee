@@ -1,11 +1,14 @@
 import React from "react";
 import { render } from "react-dom";
+import GlobalStyle from "./layout/GlobalStyle";
+import WelcomeScreen from "./containers/WelcomeScreen";
 
 const App = () => {
   return (
-    <div>
-      <h1>It works</h1>
-    </div>
+    <>
+      <GlobalStyle />
+      <WelcomeScreen />
+    </>
   );
 };
 
