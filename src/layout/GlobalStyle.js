@@ -1,13 +1,18 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css?family=Exo+2:400,600,800|Montserrat:400,500,700|Raleway:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Carter+One|Share&display=swap');
 *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
 }
+
+html {
+  color: #fff;
+}
+
 textarea,
 input.text,
 input[type="text"],
