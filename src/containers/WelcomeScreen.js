@@ -30,6 +30,9 @@ const WelcomeWrapper = styled.section`
     line-height: 27px;
     margin-bottom: 50px;
   }
+  button:last-child {
+    margin-top: 50px;
+  }
 `;
 
 const WelcomeScreen = () => {
