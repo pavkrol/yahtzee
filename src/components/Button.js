@@ -13,9 +13,9 @@ const ButtonWrapper = styled.button`
   border-radius: 10px;
 `;
 
-const Button = ({ height = "50px", width = "150px", children }) => {
+const Button = ({ height = "50px", width = "150px", children, startGame }) => {
   return (
-    <ButtonWrapper height={height} width={width}>
+    <ButtonWrapper onClick={startGame} height={height} width={width}>
       {children}
     </ButtonWrapper>
   );

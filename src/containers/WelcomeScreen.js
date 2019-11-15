@@ -35,13 +35,13 @@ const WelcomeWrapper = styled.section`
   }
 `;
 
-const WelcomeScreen = () => {
-  const [isNormal, setDifficulty] = useState(true);
-  const [isStandard, setGameType] = useState(true);
-
-  const toggleDifficulty = () => setDifficulty(!isNormal);
-  const toggleType = () => setGameType(!isStandard);
-
+const WelcomeScreen = ({
+  startGame,
+  toggleDifficulty,
+  toggleType,
+  extremeDifficulty,
+  sequenceGame
+}) => {
   return (
     <WelcomeWrapper image={dice_img}>
       <h1>Yahtzee</h1>
@@ -49,7 +49,7 @@ const WelcomeScreen = () => {
       <Switch
         option1="Normal"
         option2="Extreme"
-        isClicked={isNormal}
+        isClicked={extremeDifficulty}
         switchFunction={toggleDifficulty}
       >
         Difficulty
@@ -57,12 +57,18 @@ const WelcomeScreen = () => {
       <Switch
         option1="Standard"
         option2="In sequence"
-        isClicked={isStandard}
+        isClicked={sequenceGame}
         switchFunction={toggleType}
       >
         Game type
       </Switch>
-      <Button>Start</Button>
+      <Button
+        startGame={() => {
+          startGame(extremeDifficulty, sequenceGame);
+        }}
+      >
+        Start
+      </Button>
     </WelcomeWrapper>
   );
 };

@@ -30,8 +30,8 @@ const Switch = ({ children, isClicked, switchFunction, option1, option2 }) => {
   return (
     <SwitchWrapper onClick={() => switchFunction()}>
       <h3>{children}</h3>
-      <Option isClicked={isClicked}>{option1}</Option>
-      <Option isClicked={!isClicked}>{option2}</Option>
+      <Option isClicked={!isClicked}>{option1}</Option>
+      <Option isClicked={isClicked}>{option2}</Option>
     </SwitchWrapper>
   );
 };
