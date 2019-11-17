@@ -30,9 +30,12 @@ const Scoreboard = ({ dice_set }) => {
   const [yahtzeeCount, setYahtzeeCount] = useState(0);
   const [finalResult, setFinalResult] = useState(0);
 
-  const [upperResults, dispatch] = useReducer(reducer, upperSectionInitial);
+  const [upperResults, dispatch] = useReducer(
+    scoreReducer,
+    upperSectionInitial
+  );
 
-  function reducer(state, action) {
+  function scoreReducer(state, action) {
     switch (action.type) {
       case "updateUpper":
         state[action.index].result = calculateSumOf(

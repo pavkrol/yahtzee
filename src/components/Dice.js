@@ -126,7 +126,7 @@ const DiceWrapper = styled.div`
         display: block;
       `}
     
-  }
+    }
 `;
 
 const Dice = ({ value, hold, hold_dice, number }) => {

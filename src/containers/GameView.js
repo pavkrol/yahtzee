@@ -74,6 +74,7 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
         return [...state];
       case "hold":
         state[action.index].hold = !state[action.index].hold;
+        return [...state];
       default:
         return [...state];
     }
