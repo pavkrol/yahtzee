@@ -2,8 +2,8 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 const DiceWrapper = styled.div`
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   background-color: #fff;
   padding: 10px;
   display: grid;
@@ -11,6 +11,8 @@ const DiceWrapper = styled.div`
   border-radius: 10px;
   position: relative;
   border: 2px solid #FFF;
+  cursor: pointer;
+  justify-self: center;
   ${props =>
     props.hold &&
     css`

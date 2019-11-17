@@ -1,9 +1,10 @@
 import React, { useReducer } from "react";
 import styled from "styled-components";
 import Dice from "../components/Dice";
+import Scoreboard from "../components/Scoreboard";
 
 const GameViewWrapper = styled.section`
-  padding: 100px 0;
+  padding: 40px 0;
   background: radial-gradient(50% 50% at 50% 50%, #1e5c94 0%, #223b52 100%);
   height: 100vh;
   display: flex;
@@ -31,14 +32,24 @@ const GameViewWrapper = styled.section`
 
 const Board = styled.div`
   width: 900px;
-  height: 650px;
+  min-height: 650px;
   background: radial-gradient(50% 50% at 50% 50%, #007d51 0%, #00603e 100%);
   box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   padding: 50px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 200px repeat(5, 1fr);
+  grid-template-rows: 100px auto;
+  grid-gap: 20px;
+  table {
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+  }
+`;
+
+const RollButton = styled.button`
+  grid-column: span 5;
+  align-self: start;
 `;
 
 const GameView = ({ extremeDifficulty, sequenceGame }) => {
@@ -47,7 +58,6 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
   };
 
   const initialState = [
-    { hold: false, value: roll_dice() },
     { hold: false, value: roll_dice() },
     { hold: false, value: roll_dice() },
     { hold: false, value: roll_dice() },
@@ -84,7 +94,6 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
       <h1>Yahtzee</h1>
       <h2>Dice Game</h2>
       <Board>
-        <button onClick={() => roll_dice_set()}>Roll</button>
         {dice_set.map((dice, index) => (
           <Dice
             hold_dice={hold_dice}
@@ -94,6 +103,8 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
             hold={dice.hold}
           />
         ))}
+        <RollButton onClick={() => roll_dice_set()}>Roll</RollButton>
+        <Scoreboard dice_set={dice_set} />
       </Board>
     </GameViewWrapper>
   );
