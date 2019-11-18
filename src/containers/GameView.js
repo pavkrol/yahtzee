@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useState } from "react";
 import styled from "styled-components";
 import Dice from "../components/Dice";
 import Scoreboard from "../components/Scoreboard";
@@ -65,6 +65,7 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
     { hold: false, value: roll_dice() }
   ];
 
+  let [rollCount, setRollCount] = useState(0);
   const [dice_set, dispatch] = useReducer(reducer, initialState);
 
   function reducer(state, action) {
@@ -84,6 +85,7 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
     dice_set.forEach((dice, index) => {
       !dice.hold && dispatch({ type: "roll", index: index });
     });
+    setRollCount(rollCount + 1);
   };
 
   const hold_dice = index => {
@@ -105,7 +107,7 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
           />
         ))}
         <RollButton onClick={() => roll_dice_set()}>Roll</RollButton>
-        <Scoreboard dice_set={dice_set} />
+        <Scoreboard dice_set={dice_set} rollCount={rollCount} />
       </Board>
     </GameViewWrapper>
   );

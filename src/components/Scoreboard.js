@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const TableWrapper = styled.table``;
 
-const Scoreboard = ({ dice_set }) => {
+const Scoreboard = ({ dice_set, rollCount }) => {
   const upperSectionInitial = [
     { category: "Aces", result: 0 },
     { category: "Twos", result: 0 },
@@ -13,7 +13,7 @@ const Scoreboard = ({ dice_set }) => {
     { category: "Sixes", result: 0 }
   ];
 
-  const lowerSection = [
+  const lowerSectionInitial = [
     { category: "3 of a kind", result: 0 },
     { category: "4 of a kind", result: 0 },
     { category: "Full House", result: 0 },
@@ -35,6 +35,11 @@ const Scoreboard = ({ dice_set }) => {
     upperSectionInitial
   );
 
+  const [lowerResults, dispatch2] = useReducer(
+    scoreReducer,
+    lowerSectionInitial
+  );
+
   function scoreReducer(state, action) {
     switch (action.type) {
       case "updateUpper":
@@ -42,6 +47,9 @@ const Scoreboard = ({ dice_set }) => {
           action.diceSet,
           action.number
         );
+        return [...state];
+      case "updateLower":
+        state[action.index].result = action.result;
         return [...state];
       default:
         return [...state];
@@ -75,10 +83,129 @@ const Scoreboard = ({ dice_set }) => {
     setUpperTotal(result);
   };
 
+  const calculateThreeOfAKind = dice_set => {
+    const result = dice_set.reduce(function(previous, current) {
+      if (current.value in previous) {
+        previous[current.value]++;
+      } else {
+        previous[current.value] = 1;
+      }
+      return previous;
+    }, {});
+    let isThree = false;
+    for (const item in result) {
+      if (result[item] > 2) isThree = true;
+    }
+    const dice_sum = dice_set.reduce(
+      (previous, current) => previous + current.value,
+      0
+    );
+    isThree
+      ? dispatch2({
+          type: "updateLower",
+          index: 0,
+          result: dice_sum
+        })
+      : dispatch2({
+          type: "updateLower",
+          index: 0,
+          result: 0
+        });
+  };
+
+  const calculateFourOfAKind = dice_set => {
+    const result = dice_set.reduce(function(previous, current) {
+      if (current.value in previous) {
+        previous[current.value]++;
+      } else {
+        previous[current.value] = 1;
+      }
+      return previous;
+    }, {});
+    let isFour = false;
+    for (const item in result) {
+      if (result[item] > 3) isFour = true;
+    }
+    const dice_sum = dice_set.reduce(
+      (previous, current) => previous + current.value,
+      0
+    );
+    isFour
+      ? dispatch2({
+          type: "updateLower",
+          index: 1,
+          result: dice_sum
+        })
+      : dispatch2({
+          type: "updateLower",
+          index: 1,
+          result: 0
+        });
+  };
+
+  const calculateFullHouse = dice_set => {
+    const sorted_dice = dice_set.map(dice => dice.value).sort();
+    let isFullHouse = false;
+    (sorted_dice[0] === sorted_dice[1] &&
+      sorted_dice[1] === sorted_dice[2] &&
+      sorted_dice[2] !== sorted_dice[3] &&
+      sorted_dice[3] === sorted_dice[4]) ||
+    (sorted_dice[0] === sorted_dice[1] &&
+      sorted_dice[1] !== sorted_dice[2] &&
+      sorted_dice[2] === sorted_dice[3] &&
+      sorted_dice[3] === sorted_dice[4])
+      ? (isFullHouse = true)
+      : (isFullHouse = false);
+
+    isFullHouse
+      ? dispatch2({
+          type: "updateLower",
+          index: 2,
+          result: 25
+        })
+      : dispatch2({
+          type: "updateLower",
+          index: 2,
+          result: 0
+        });
+  };
+
+  const calculateLargeStraight = dice_set => {
+    const sorted_dice = dice_set.map(dice => dice.value).sort();
+    let isLargeStraight = false;
+    (sorted_dice[0] === 1 &&
+      sorted_dice[1] === 2 &&
+      sorted_dice[2] === 3 &&
+      sorted_dice[3] === 4 &&
+      sorted_dice[4] === 5) ||
+    (sorted_dice[0] === 2 &&
+      sorted_dice[1] === 3 &&
+      sorted_dice[2] === 4 &&
+      sorted_dice[3] === 5 &&
+      sorted_dice[4] === 6)
+      ? (isLargeStraight = true)
+      : (isLargeStraight = false);
+    isLargeStraight
+      ? dispatch2({
+          type: "updateLower",
+          index: 4,
+          result: 40
+        })
+      : dispatch2({
+          type: "updateLower",
+          index: 4,
+          result: 0
+        });
+  };
+
   useEffect(() => {
     calculateUpperSection();
     calculateUpperTotal();
-  }, [dice_set]);
+    calculateThreeOfAKind(dice_set);
+    calculateFourOfAKind(dice_set);
+    calculateFullHouse(dice_set);
+    calculateLargeStraight(dice_set);
+  }, [rollCount]);
 
   return (
     <TableWrapper>
@@ -106,7 +233,7 @@ const Scoreboard = ({ dice_set }) => {
           <td>Total Upper Section</td>
           <td>{upperTotal + bonus}</td>
         </tr>
-        {lowerSection.map(item => (
+        {lowerResults.map(item => (
           <tr key={item.category}>
             <td>{item.category}</td>
             <td>{item.result}</td>
@@ -122,7 +249,7 @@ const Scoreboard = ({ dice_set }) => {
         </tr>
         <tr>
           <td>
-            <button onClick={() => calculateUpperSection()}>Calculate</button>
+            <button>Calculate</button>
           </td>
         </tr>
       </tbody>
