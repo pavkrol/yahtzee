@@ -5,23 +5,23 @@ const TableWrapper = styled.table``;
 
 const Scoreboard = ({ dice_set, rollCount }) => {
   const upperSectionInitial = [
-    { category: "Aces", result: 0 },
-    { category: "Twos", result: 0 },
-    { category: "Threes", result: 0 },
-    { category: "Fours", result: 0 },
-    { category: "Fives", result: 0 },
-    { category: "Sixes", result: 0 }
+    { category: "Aces", result: 0, confirmed: false },
+    { category: "Twos", result: 0, confirmed: false },
+    { category: "Threes", result: 0, confirmed: false },
+    { category: "Fours", result: 0, confirmed: false },
+    { category: "Fives", result: 0, confirmed: false },
+    { category: "Sixes", result: 0, confirmed: false }
   ];
 
   const lowerSectionInitial = [
-    { category: "3 of a kind", result: 0 },
-    { category: "4 of a kind", result: 0 },
-    { category: "Full House", result: 0 },
-    { category: "Small Straight", result: 0 },
-    { category: "Large Straight", result: 0 },
-    { category: "Yahtzee", result: 0 },
-    { category: "Chance", result: 0 },
-    { category: "Yahtzee Bonus", result: 0 }
+    { category: "3 of a kind", result: 0, confirmed: false },
+    { category: "4 of a kind", result: 0, confirmed: false },
+    { category: "Full House", result: 0, confirmed: false },
+    { category: "Small Straight", result: 0, confirmed: false },
+    { category: "Large Straight", result: 0, confirmed: false },
+    { category: "Yahtzee", result: 0, confirmed: false },
+    { category: "Chance", result: 0, confirmed: false },
+    { category: "Yahtzee Bonus", result: 0, confirmed: false }
   ];
 
   const [bonus, setBonus] = useState(0);
@@ -64,7 +64,7 @@ const Scoreboard = ({ dice_set, rollCount }) => {
     );
   }
 
-  const calculateUpperSection = () => {
+  const calculateUpperSection = dice_set => {
     upperResults.forEach((item, index) => {
       dispatch({
         type: "updateUpper",
@@ -170,6 +170,32 @@ const Scoreboard = ({ dice_set, rollCount }) => {
         });
   };
 
+  const calculateSmallStraight = dice_set => {
+    const sorted_dice = dice_set
+      .map(dice => dice.value)
+      .sort()
+      .filter((item, position, array) => {
+        return !position || item !== array[position - 1];
+      });
+    let consecutive_count = 0;
+    sorted_dice.forEach((dice, index) => {
+      index > 0 && dice === sorted_dice[index - 1] + 1
+        ? consecutive_count++
+        : null;
+    });
+    consecutive_count >= 3
+      ? dispatch2({
+          type: "updateLower",
+          index: 3,
+          result: 30
+        })
+      : dispatch2({
+          type: "updateLower",
+          index: 3,
+          result: 0
+        });
+  };
+
   const calculateLargeStraight = dice_set => {
     const sorted_dice = dice_set.map(dice => dice.value).sort();
     let isLargeStraight = false;
@@ -198,13 +224,51 @@ const Scoreboard = ({ dice_set, rollCount }) => {
         });
   };
 
+  const calculateYahtzee = dice_set => {
+    let isYatzee = false;
+    const flat_array = dice_set.map(dice => dice.value);
+    if (
+      flat_array[0] === flat_array[1] &&
+      flat_array[1] === flat_array[2] &&
+      flat_array[2] === flat_array[3] &&
+      flat_array[3] === flat_array[4]
+    )
+      isYatzee = true;
+    isYatzee
+      ? dispatch2({
+          type: "updateLower",
+          index: 5,
+          result: 50
+        })
+      : dispatch2({
+          type: "updateLower",
+          index: 5,
+          result: 0
+        });
+  };
+
+  const calculateChance = dice_set => {
+    const dice_sum = dice_set.reduce(
+      (previous, current) => previous + current.value,
+      0
+    );
+    dispatch2({
+      type: "updateLower",
+      index: 6,
+      result: dice_sum
+    });
+  };
+
   useEffect(() => {
-    calculateUpperSection();
+    calculateUpperSection(dice_set);
     calculateUpperTotal();
     calculateThreeOfAKind(dice_set);
     calculateFourOfAKind(dice_set);
     calculateFullHouse(dice_set);
+    calculateSmallStraight(dice_set);
     calculateLargeStraight(dice_set);
+    calculateYahtzee(dice_set);
+    calculateChance(dice_set);
   }, [rollCount]);
 
   return (
@@ -246,11 +310,6 @@ const Scoreboard = ({ dice_set, rollCount }) => {
         <tr>
           <td>Final Result</td>
           <td>{finalResult}</td>
-        </tr>
-        <tr>
-          <td>
-            <button>Calculate</button>
-          </td>
         </tr>
       </tbody>
     </TableWrapper>
