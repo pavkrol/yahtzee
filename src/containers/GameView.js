@@ -38,7 +38,7 @@ const Board = styled.div`
   border-radius: 10px;
   padding: 50px;
   display: grid;
-  grid-template-columns: 200px repeat(5, 1fr);
+  grid-template-columns: 300px repeat(5, 1fr);
   grid-template-rows: 100px auto;
   grid-gap: 20px;
   table {

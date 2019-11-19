@@ -1,7 +1,35 @@
 import React, { useState, useReducer, useEffect } from "react";
 import styled from "styled-components";
 
-const TableWrapper = styled.table``;
+const TableWrapper = styled.table`
+  border-collapse: collapse;
+  background-color: #fff;
+  color: #000;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 18px;
+  td {
+    border: 1px solid #a8a2a2;
+
+    padding-left: 10px;
+  }
+  tr:first-child td {
+    border-top: 0;
+  }
+  tr td:first-child {
+    border-left: 0;
+  }
+  tr:last-child td {
+    border-bottom: 0;
+  }
+  tr td:last-child {
+    border-right: 0;
+    cursor: pointer;
+  }
+`;
+
+const CategoryResult = styled.td`
+  color: ${props => (props.confirmed === true ? "#000" : "#a8a2a2")};
+`;
 
 const Scoreboard = ({ dice_set, rollCount }) => {
   const upperSectionInitial = [
@@ -30,17 +58,11 @@ const Scoreboard = ({ dice_set, rollCount }) => {
   const [yahtzeeCount, setYahtzeeCount] = useState(0);
   const [finalResult, setFinalResult] = useState(0);
 
-  const [upperResults, dispatch] = useReducer(
-    scoreReducer,
-    upperSectionInitial
-  );
+  const [upperResults, dispatch] = useReducer(reducer, upperSectionInitial);
 
-  const [lowerResults, dispatch2] = useReducer(
-    scoreReducer,
-    lowerSectionInitial
-  );
+  const [lowerResults, dispatch2] = useReducer(reducer, lowerSectionInitial);
 
-  function scoreReducer(state, action) {
+  function reducer(state, action) {
     switch (action.type) {
       case "updateUpper":
         state[action.index].result = calculateSumOf(
@@ -51,6 +73,8 @@ const Scoreboard = ({ dice_set, rollCount }) => {
       case "updateLower":
         state[action.index].result = action.result;
         return [...state];
+      case "confirmScore":
+        state[action.index].confirmed = true;
       default:
         return [...state];
     }
@@ -259,6 +283,18 @@ const Scoreboard = ({ dice_set, rollCount }) => {
     });
   };
 
+  const confirmScore = (section, index) => {
+    section === "upper"
+      ? dispatch({
+          type: "confirmScore",
+          index: index
+        })
+      : dispatch2({
+          type: "confirmScore",
+          index: index
+        });
+  };
+
   useEffect(() => {
     calculateUpperSection(dice_set);
     calculateUpperTotal();
@@ -279,10 +315,15 @@ const Scoreboard = ({ dice_set, rollCount }) => {
         </tr>
       </thead>
       <tbody>
-        {upperResults.map(item => (
+        {upperResults.map((item, index) => (
           <tr key={item.category}>
             <td>{item.category}</td>
-            <td>{item.result}</td>
+            <CategoryResult
+              confirmed={item.confirmed}
+              onClick={() => confirmScore("upper", index)}
+            >
+              {item.result}
+            </CategoryResult>
           </tr>
         ))}
         <tr>
