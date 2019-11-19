@@ -2,6 +2,8 @@ import React, { useReducer, useState } from "react";
 import styled from "styled-components";
 import Dice from "../components/Dice";
 import Scoreboard from "../components/Scoreboard";
+import Logo from "../components/Logo";
+import wooden_border from "../img/border.png";
 
 const GameViewWrapper = styled.section`
   padding: 40px 0;
@@ -10,30 +12,12 @@ const GameViewWrapper = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  h1 {
-    padding: 20px 85px;
-    font-family: "Carter One", sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 52px;
-    line-height: 60px;
-    position: relative;
-    background-image: url(${props => props.image});
-    background-size: contain;
-    background-repeat: no-repeat;
-  }
-  h2 {
-    font-family: "Share", sans-serif;
-    font-size: 24px;
-    line-height: 27px;
-    margin-bottom: 50px;
-  }
 `;
 
 const Board = styled.div`
   width: 900px;
   min-height: 650px;
-  background: radial-gradient(50% 50% at 50% 50%, #007d51 0%, #00603e 100%);
+  background: radial-gradient(50% 50% at 50% 50%, #007d51 0%, #004c31 100%);
   box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   padding: 50px;
@@ -41,6 +25,19 @@ const Board = styled.div`
   grid-template-columns: 300px repeat(5, 1fr);
   grid-template-rows: 100px auto;
   grid-gap: 20px;
+  position: relative;
+  :after {
+    content: "";
+    width: 105%;
+    height: 105%;
+    top: -2.5%;
+    left: -2.5%;
+    position: absolute;
+    background-image: url(${props => props.image});
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
   table {
     grid-column: 1 / 2;
     grid-row: 1 / 3;
@@ -50,6 +47,10 @@ const Board = styled.div`
 const RollButton = styled.button`
   grid-column: span 5;
   align-self: start;
+  justify-self: center;
+  height: 30px;
+  width: 60px;
+  border: 1px solid #fff;
 `;
 
 const GameView = ({ extremeDifficulty, sequenceGame }) => {
@@ -94,9 +95,8 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
 
   return (
     <GameViewWrapper>
-      <h1>Yahtzee</h1>
-      <h2>Dice Game</h2>
-      <Board>
+      <Logo />
+      <Board image={wooden_border}>
         {dice_set.map((dice, index) => (
           <Dice
             hold_dice={hold_dice}

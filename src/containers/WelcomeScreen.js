@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "../components/Button";
 import Switch from "../components/Switch";
-import dice_img from "../img/dice.png";
+import Logo from "../components/Logo";
 
 const WelcomeWrapper = styled.section`
   width: 100%;
@@ -12,24 +12,6 @@ const WelcomeWrapper = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  h1 {
-    padding: 20px 85px;
-    font-family: "Carter One", sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 52px;
-    line-height: 60px;
-    position: relative;
-    background-image: url(${props => props.image});
-    background-size: contain;
-    background-repeat: no-repeat;
-  }
-  h2 {
-    font-family: "Share", sans-serif;
-    font-size: 24px;
-    line-height: 27px;
-    margin-bottom: 50px;
-  }
   button:last-child {
     margin-top: 50px;
   }
@@ -43,9 +25,8 @@ const WelcomeScreen = ({
   sequenceGame
 }) => {
   return (
-    <WelcomeWrapper image={dice_img}>
-      <h1>Yahtzee</h1>
-      <h2>Dice Game</h2>
+    <WelcomeWrapper>
+      <Logo />
       <Switch
         option1="Normal"
         option2="Extreme"

@@ -7,6 +7,7 @@ const TableWrapper = styled.table`
   color: #000;
   font-family: "Titillium Web", sans-serif;
   font-size: 18px;
+  border-radius: 5px;
   td {
     border: 1px solid #a8a2a2;
 
@@ -75,6 +76,7 @@ const Scoreboard = ({ dice_set, rollCount }) => {
         return [...state];
       case "confirmScore":
         state[action.index].confirmed = true;
+        return [...state];
       default:
         return [...state];
     }
@@ -101,10 +103,24 @@ const Scoreboard = ({ dice_set, rollCount }) => {
 
   const calculateUpperTotal = () => {
     const result = upperResults.reduce(
-      (previous, current) => previous + current.result,
+      (previous, current) =>
+        current.confirmed ? previous + current.result : previous,
       0
     );
     setUpperTotal(result);
+  };
+
+  const calculateLowerTotal = () => {
+    const result = lowerResults.reduce(
+      (previous, current) =>
+        current.confirmed ? previous + current.result : previous,
+      0
+    );
+    setLowerTotal(result);
+  };
+
+  const calculateFinalResult = () => {
+    setFinalResult(lowerTotal + upperTotal);
   };
 
   const calculateThreeOfAKind = dice_set => {
@@ -284,20 +300,20 @@ const Scoreboard = ({ dice_set, rollCount }) => {
   };
 
   const confirmScore = (section, index) => {
-    section === "upper"
-      ? dispatch({
-          type: "confirmScore",
-          index: index
-        })
-      : dispatch2({
-          type: "confirmScore",
-          index: index
-        });
+    if (section === "upper")
+      dispatch({
+        type: "confirmScore",
+        index: index
+      });
+    if (section === "lower")
+      dispatch2({
+        type: "confirmScore",
+        index: index
+      });
   };
 
   useEffect(() => {
     calculateUpperSection(dice_set);
-    calculateUpperTotal();
     calculateThreeOfAKind(dice_set);
     calculateFourOfAKind(dice_set);
     calculateFullHouse(dice_set);
@@ -305,13 +321,16 @@ const Scoreboard = ({ dice_set, rollCount }) => {
     calculateLargeStraight(dice_set);
     calculateYahtzee(dice_set);
     calculateChance(dice_set);
+    calculateUpperTotal();
+    calculateLowerTotal();
+    calculateFinalResult();
   }, [rollCount]);
 
   return (
     <TableWrapper>
       <thead>
         <tr>
-          <th colSpan="2">Upper Section</th>
+          <th colSpan="2">Scoreboard</th>
         </tr>
       </thead>
       <tbody>
@@ -338,10 +357,15 @@ const Scoreboard = ({ dice_set, rollCount }) => {
           <td>Total Upper Section</td>
           <td>{upperTotal + bonus}</td>
         </tr>
-        {lowerResults.map(item => (
+        {lowerResults.map((item, index) => (
           <tr key={item.category}>
             <td>{item.category}</td>
-            <td>{item.result}</td>
+            <CategoryResult
+              confirmed={item.confirmed}
+              onClick={() => confirmScore("lower", index)}
+            >
+              {item.result}
+            </CategoryResult>
           </tr>
         ))}
         <tr>
