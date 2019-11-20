@@ -54,6 +54,10 @@ const RollButton = styled.button`
 `;
 
 const GameView = ({ extremeDifficulty, sequenceGame }) => {
+  let [rollCount, setRollCount] = useState(0);
+  let [movesLeft, setMoves] = useState(13);
+  let [singleMove, setSingleMove] = useState(2);
+
   const roll_dice = () => {
     return Math.floor(Math.random() * 6) + 1;
   };
@@ -66,7 +70,6 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
     { hold: false, value: roll_dice() }
   ];
 
-  let [rollCount, setRollCount] = useState(0);
   const [dice_set, dispatch] = useReducer(reducer, initialState);
 
   function reducer(state, action) {
@@ -82,6 +85,20 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
     }
   }
 
+  const updateMoves = () => {
+    dice_set.forEach((item, index) => {
+      if (item.hold === true) {
+        dispatch({ type: "hold", index: index });
+      }
+      dispatch({ type: "roll", index: index });
+    });
+    setMoves(movesLeft - 1);
+    setSingleMove(2);
+  };
+
+  const updateSingleMove = () => {
+    setSingleMove(singleMove - 1);
+  };
   const roll_dice_set = () => {
     dice_set.forEach((dice, index) => {
       !dice.hold && dispatch({ type: "roll", index: index });
@@ -91,6 +108,13 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
 
   const hold_dice = index => {
     dispatch({ type: "hold", index: index });
+  };
+
+  const handleRoll = singleMove => {
+    if (singleMove) {
+      roll_dice_set();
+      updateSingleMove();
+    }
   };
 
   return (
@@ -106,8 +130,17 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
             hold={dice.hold}
           />
         ))}
-        <RollButton onClick={() => roll_dice_set()}>Roll</RollButton>
-        <Scoreboard dice_set={dice_set} rollCount={rollCount} />
+        <RollButton
+          onClick={() => handleRoll(singleMove)}
+          singleMove={singleMove}
+        >
+          Roll
+        </RollButton>
+        <Scoreboard
+          dice_set={dice_set}
+          rollCount={rollCount}
+          updateMoves={updateMoves}
+        />
       </Board>
     </GameViewWrapper>
   );

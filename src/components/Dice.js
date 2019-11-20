@@ -131,7 +131,14 @@ const DiceWrapper = styled.div`
 
 const Dice = ({ value, hold, hold_dice, number }) => {
   return (
-    <DiceWrapper onClick={() => hold_dice(number)} value={value} hold={hold}>
+    <DiceWrapper
+      onClick={() => {
+        hold_dice(number);
+        console.log("click");
+      }}
+      value={value}
+      hold={hold}
+    >
       <div></div>
       <div></div>
       <div></div>

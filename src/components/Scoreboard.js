@@ -32,7 +32,7 @@ const CategoryResult = styled.td`
   color: ${props => (props.confirmed === true ? "#000" : "#a8a2a2")};
 `;
 
-const Scoreboard = ({ dice_set, rollCount }) => {
+const Scoreboard = ({ dice_set, rollCount, updateMoves }) => {
   const upperSectionInitial = [
     { category: "Aces", result: 0, confirmed: false },
     { category: "Twos", result: 0, confirmed: false },
@@ -58,6 +58,7 @@ const Scoreboard = ({ dice_set, rollCount }) => {
   const [lowerTotal, setLowerTotal] = useState(0);
   const [yahtzeeCount, setYahtzeeCount] = useState(0);
   const [finalResult, setFinalResult] = useState(0);
+  const [scoreConfirmed, toggleScoreConfirmed] = useState(true);
 
   const [upperResults, dispatch] = useReducer(reducer, upperSectionInitial);
 
@@ -300,16 +301,19 @@ const Scoreboard = ({ dice_set, rollCount }) => {
   };
 
   const confirmScore = (section, index) => {
-    if (section === "upper")
+    if (section === "upper") {
       dispatch({
         type: "confirmScore",
         index: index
       });
-    if (section === "lower")
+    }
+
+    if (section === "lower") {
       dispatch2({
         type: "confirmScore",
         index: index
       });
+    }
   };
 
   useEffect(() => {
@@ -324,7 +328,7 @@ const Scoreboard = ({ dice_set, rollCount }) => {
     calculateUpperTotal();
     calculateLowerTotal();
     calculateFinalResult();
-  }, [rollCount]);
+  }, [rollCount, scoreConfirmed]);
 
   return (
     <TableWrapper>
@@ -339,7 +343,11 @@ const Scoreboard = ({ dice_set, rollCount }) => {
             <td>{item.category}</td>
             <CategoryResult
               confirmed={item.confirmed}
-              onClick={() => confirmScore("upper", index)}
+              onClick={() => {
+                confirmScore("upper", index);
+                toggleScoreConfirmed(!scoreConfirmed);
+                updateMoves();
+              }}
             >
               {item.result}
             </CategoryResult>
@@ -362,7 +370,10 @@ const Scoreboard = ({ dice_set, rollCount }) => {
             <td>{item.category}</td>
             <CategoryResult
               confirmed={item.confirmed}
-              onClick={() => confirmScore("lower", index)}
+              onClick={() => {
+                confirmScore("lower", index);
+                updateMoves();
+              }}
             >
               {item.result}
             </CategoryResult>
