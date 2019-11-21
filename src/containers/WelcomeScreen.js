@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import Button from "../components/Button";
 import Switch from "../components/Switch";
 import Logo from "../components/Logo";
@@ -13,7 +14,7 @@ const WelcomeWrapper = styled.section`
   justify-content: center;
   align-items: center;
   button:last-child {
-    margin-top: 50px;
+    margin-top: s50px;
   }
 `;
 
@@ -55,3 +56,11 @@ const WelcomeScreen = ({
 };
 
 export default WelcomeScreen;
+
+WelcomeScreen.propTypes = {
+  startGame: PropTypes.func.isRequired,
+  toggleDifficulty: PropTypes.func.isRequired,
+  toggleType: PropTypes.func.isRequired,
+  extremeDifficulty: PropTypes.bool.isRequired,
+  sequenceGame: PropTypes.bool.isRequired
+};

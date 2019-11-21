@@ -1,5 +1,6 @@
 import React, { useReducer, useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import Dice from "../components/Dice";
 import Scoreboard from "../components/Scoreboard";
 import Logo from "../components/Logo";
@@ -147,3 +148,8 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
 };
 
 export default GameView;
+
+GameView.propTypes = {
+  extremeDifficulty: PropTypes.bool,
+  sequenceGame: PropTypes.bool
+};

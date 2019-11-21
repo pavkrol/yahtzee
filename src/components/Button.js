@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const ButtonWrapper = styled.button`
   font-size: 22px;
@@ -13,7 +14,7 @@ const ButtonWrapper = styled.button`
   border-radius: 10px;
 `;
 
-const Button = ({ height = "50px", width = "150px", children, startGame }) => {
+const Button = ({ height, width, children, startGame }) => {
   return (
     <ButtonWrapper onClick={startGame} height={height} width={width}>
       {children}
@@ -22,3 +23,14 @@ const Button = ({ height = "50px", width = "150px", children, startGame }) => {
 };
 
 export default Button;
+
+Button.propTypes = {
+  height: PropTypes.string,
+  width: PropTypes.string,
+  startGame: PropTypes.func.isRequired
+};
+
+Button.defaultProps = {
+  height: "50px",
+  width: "150px"
+};

@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import PropTypes from "prop-types";
 
 const DiceWrapper = styled.div`
   width: 80px;
@@ -134,7 +135,6 @@ const Dice = ({ value, hold, hold_dice, number }) => {
     <DiceWrapper
       onClick={() => {
         hold_dice(number);
-        console.log("click");
       }}
       value={value}
       hold={hold}
@@ -150,3 +150,10 @@ const Dice = ({ value, hold, hold_dice, number }) => {
 };
 
 export default Dice;
+
+Dice.propTypes = {
+  value: PropTypes.number.isRequired,
+  hold: PropTypes.bool.isRequired,
+  hold_dice: PropTypes.func.isRequired,
+  number: PropTypes.number.isRequired
+};

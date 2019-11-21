@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const SwitchWrapper = styled.div`
   display: flex;
@@ -37,3 +38,10 @@ const Switch = ({ children, isClicked, switchFunction, option1, option2 }) => {
 };
 
 export default Switch;
+
+Switch.propTypes = {
+  isClicked: PropTypes.bool.isRequired,
+  switchFunction: PropTypes.func.isRequired,
+  option1: PropTypes.string.isRequired,
+  option2: PropTypes.string.isRequired
+};

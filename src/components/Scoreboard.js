@@ -1,5 +1,6 @@
 import React, { useState, useReducer, useEffect } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const TableWrapper = styled.table`
   border-collapse: collapse;
@@ -102,7 +103,7 @@ const Scoreboard = ({ dice_set, rollCount, updateMoves }) => {
     });
   };
 
-  const calculateUpperTotal = () => {
+  const calculateUpperTotal = upperResults => {
     const result = upperResults.reduce(
       (previous, current) =>
         current.confirmed ? previous + current.result : previous,
@@ -111,7 +112,7 @@ const Scoreboard = ({ dice_set, rollCount, updateMoves }) => {
     setUpperTotal(result);
   };
 
-  const calculateLowerTotal = () => {
+  const calculateLowerTotal = lowerResults => {
     const result = lowerResults.reduce(
       (previous, current) =>
         current.confirmed ? previous + current.result : previous,
@@ -120,7 +121,7 @@ const Scoreboard = ({ dice_set, rollCount, updateMoves }) => {
     setLowerTotal(result);
   };
 
-  const calculateFinalResult = () => {
+  const calculateFinalResult = (lowerTotal, upperTotal) => {
     setFinalResult(lowerTotal + upperTotal);
   };
 
@@ -325,9 +326,9 @@ const Scoreboard = ({ dice_set, rollCount, updateMoves }) => {
     calculateLargeStraight(dice_set);
     calculateYahtzee(dice_set);
     calculateChance(dice_set);
-    calculateUpperTotal();
-    calculateLowerTotal();
-    calculateFinalResult();
+    calculateUpperTotal(upperResults);
+    calculateLowerTotal(lowerResults);
+    calculateFinalResult(lowerTotal, upperTotal);
   }, [rollCount, scoreConfirmed]);
 
   return (
@@ -393,3 +394,9 @@ const Scoreboard = ({ dice_set, rollCount, updateMoves }) => {
 };
 
 export default Scoreboard;
+
+Scoreboard.propTypes = {
+  dice_set: PropTypes.arrayOf(PropTypes.object),
+  rollCount: PropTypes.number,
+  updateMoves: PropTypes.func
+};
