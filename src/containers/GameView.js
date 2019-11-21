@@ -4,7 +4,10 @@ import PropTypes from "prop-types";
 import Dice from "../components/Dice";
 import Scoreboard from "../components/Scoreboard";
 import Logo from "../components/Logo";
+import RollButton from "../components/RollButton";
 import wooden_border from "../img/border.png";
+import { roll_dice } from "../components/helpers";
+import { initialDiceValues } from "../data/initialValues";
 
 const GameViewWrapper = styled.section`
   padding: 40px 0;
@@ -45,33 +48,11 @@ const Board = styled.div`
   }
 `;
 
-const RollButton = styled.button`
-  grid-column: span 5;
-  align-self: start;
-  justify-self: center;
-  height: 30px;
-  width: 60px;
-  border: 1px solid #fff;
-`;
-
 const GameView = ({ extremeDifficulty, sequenceGame }) => {
   let [rollCount, setRollCount] = useState(0);
   let [movesLeft, setMoves] = useState(13);
   let [singleMove, setSingleMove] = useState(2);
-
-  const roll_dice = () => {
-    return Math.floor(Math.random() * 6) + 1;
-  };
-
-  const initialState = [
-    { hold: false, value: roll_dice() },
-    { hold: false, value: roll_dice() },
-    { hold: false, value: roll_dice() },
-    { hold: false, value: roll_dice() },
-    { hold: false, value: roll_dice() }
-  ];
-
-  const [dice_set, dispatch] = useReducer(reducer, initialState);
+  const [dice_set, dispatch] = useReducer(reducer, initialDiceValues);
 
   function reducer(state, action) {
     switch (action.type) {
@@ -131,10 +112,7 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
             hold={dice.hold}
           />
         ))}
-        <RollButton
-          onClick={() => handleRoll(singleMove)}
-          singleMove={singleMove}
-        >
+        <RollButton handleRoll={handleRoll} singleMove={singleMove}>
           Roll
         </RollButton>
         <Scoreboard
