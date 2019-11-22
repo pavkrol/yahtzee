@@ -1,13 +1,32 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Dice from "../components/Dice";
 import Scoreboard from "../components/Scoreboard";
 import Logo from "../components/Logo";
 import RollButton from "../components/RollButton";
+import Counters from "../components/Counters";
 import wooden_border from "../img/border.png";
-import { roll_dice } from "../components/helpers";
-import { initialDiceValues } from "../data/initialValues";
+import {
+  roll_dice,
+  calculateSumOf,
+  calculateUpperTotal,
+  calculateLowerTotal,
+  calculateThreeOfAKind,
+  calculateFourOfAKind,
+  calculateFullHouse,
+  calculateSmallStraight,
+  calculateLargeStraight,
+  calculateChance,
+  calculateYahtzee,
+  calculateFinalResult,
+  calculateYahtzeeBonus
+} from "../components/helpers";
+import {
+  upperSectionInitial,
+  lowerSectionInitial,
+  initialDiceValues
+} from "../data/initialValues";
 
 const GameViewWrapper = styled.section`
   padding: 40px 0;
@@ -49,10 +68,16 @@ const Board = styled.div`
 `;
 
 const GameView = ({ extremeDifficulty, sequenceGame }) => {
-  let [rollCount, setRollCount] = useState(0);
   let [movesLeft, setMoves] = useState(13);
   let [singleMove, setSingleMove] = useState(2);
-  const [dice_set, dispatch] = useReducer(reducer, initialDiceValues);
+  const [dice_set, dispatch3] = useReducer(reducer, initialDiceValues);
+  const [upperTotal, setUpperTotal] = useState(0);
+  const [lowerTotal, setLowerTotal] = useState(0);
+  const [yahtzeeCount, setYahtzeeCount] = useState(0);
+  const [finalResult, setFinalResult] = useState(0);
+  const [scoreConfirmed, toggleScoreConfirmed] = useState(true);
+  const [upperResults, dispatch] = useReducer(reducer, upperSectionInitial);
+  const [lowerResults, dispatch2] = useReducer(reducer, lowerSectionInitial);
 
   function reducer(state, action) {
     switch (action.type) {
@@ -62,17 +87,77 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
       case "hold":
         state[action.index].hold = !state[action.index].hold;
         return [...state];
+      case "updateUpper":
+        if (!state[action.index].confirmed)
+          state[action.index].result = action.result;
+        return [...state];
+      case "updateLower":
+        if (!state[action.index].confirmed)
+          state[action.index].result = action.result;
+        return [...state];
+      case "confirmScore":
+        state[action.index].confirmed = true;
+        return [...state];
       default:
         return [...state];
     }
   }
 
+  const updateUpperSection = dice_set => {
+    upperResults.forEach((item, index) => {
+      const result = calculateSumOf(dice_set, index + 1);
+      dispatch({
+        type: "updateUpper",
+        index: index,
+        result: result
+      });
+    });
+  };
+
+  const updateLowerSection = dice_set => {
+    dispatch2({
+      type: "updateLower",
+      index: 0,
+      result: calculateThreeOfAKind(dice_set)
+    });
+    dispatch2({
+      type: "updateLower",
+      index: 1,
+      result: calculateFourOfAKind(dice_set)
+    });
+    dispatch2({
+      type: "updateLower",
+      index: 2,
+      result: calculateFullHouse(dice_set)
+    });
+    dispatch2({
+      type: "updateLower",
+      index: 3,
+      result: calculateSmallStraight(dice_set)
+    });
+    dispatch2({
+      type: "updateLower",
+      index: 4,
+      result: calculateLargeStraight(dice_set)
+    });
+    dispatch2({
+      type: "updateLower",
+      index: 5,
+      result: calculateYahtzee(dice_set)
+    });
+    dispatch2({
+      type: "updateLower",
+      index: 6,
+      result: calculateChance(dice_set)
+    });
+  };
+
   const updateMoves = () => {
     dice_set.forEach((item, index) => {
       if (item.hold === true) {
-        dispatch({ type: "hold", index: index });
+        dispatch3({ type: "hold", index: index });
       }
-      dispatch({ type: "roll", index: index });
+      dispatch3({ type: "roll", index: index });
     });
     setMoves(movesLeft - 1);
     setSingleMove(2);
@@ -83,13 +168,12 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
   };
   const roll_dice_set = () => {
     dice_set.forEach((dice, index) => {
-      !dice.hold && dispatch({ type: "roll", index: index });
+      !dice.hold && dispatch3({ type: "roll", index: index });
     });
-    setRollCount(rollCount + 1);
   };
 
   const hold_dice = index => {
-    dispatch({ type: "hold", index: index });
+    dispatch3({ type: "hold", index: index });
   };
 
   const handleRoll = singleMove => {
@@ -99,10 +183,41 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
     }
   };
 
+  const confirmScore = (section, index, dice_set) => {
+    if (section === "upper") {
+      dispatch({
+        type: "confirmScore",
+        index: index
+      });
+    }
+
+    if (section === "lower") {
+      dispatch2({
+        type: "confirmScore",
+        index: index
+      });
+    }
+    if (calculateYahtzee(dice_set)) setYahtzeeCount(yahtzeeCount + 1);
+    toggleScoreConfirmed(!scoreConfirmed);
+  };
+
+  const updateResults = () => {
+    setUpperTotal(calculateUpperTotal(upperResults));
+    setLowerTotal(calculateLowerTotal(lowerResults));
+    setFinalResult(
+      calculateFinalResult(upperResults, lowerResults, yahtzeeCount)
+    );
+  };
+
   return (
     <GameViewWrapper>
       <Logo />
       <Board image={wooden_border}>
+        <Counters
+          yahtzeeCount={yahtzeeCount}
+          movesLeft={movesLeft}
+          singleMove={singleMove}
+        />
         {dice_set.map((dice, index) => (
           <Dice
             hold_dice={hold_dice}
@@ -117,8 +232,19 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
         </RollButton>
         <Scoreboard
           dice_set={dice_set}
-          rollCount={rollCount}
+          updateLowerSection={updateLowerSection}
+          updateUpperSection={updateUpperSection}
+          upperResults={upperResults}
+          upperTotal={upperTotal}
+          lowerResults={lowerResults}
+          lowerTotal={lowerTotal}
+          finalResult={finalResult}
+          confirmScore={confirmScore}
           updateMoves={updateMoves}
+          updateMoves={updateMoves}
+          yahtzeeBonus={calculateYahtzeeBonus(lowerResults, yahtzeeCount)}
+          updateResults={updateResults}
+          scoreConfirmed={scoreConfirmed}
         />
       </Board>
     </GameViewWrapper>

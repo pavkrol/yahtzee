@@ -23,10 +23,6 @@ export const calculateLowerTotal = lowerResults => {
   );
 };
 
-export const calculateFinalResult = (lowerTotal, upperTotal) => {
-  return lowerTotal + upperTotal;
-};
-
 export const roll_dice = () => {
   return Math.floor(Math.random() * 6) + 1;
 };
@@ -73,53 +69,65 @@ export const calculateFourOfAKind = dice_set => {
 };
 
 export const calculateFullHouse = dice_set => {
-  const sorted_dice = dice_set.map(dice => dice.value).sort();
   let isFullHouse = false;
-  (sorted_dice[0] === sorted_dice[1] &&
-    sorted_dice[1] === sorted_dice[2] &&
-    sorted_dice[2] !== sorted_dice[3] &&
-    sorted_dice[3] === sorted_dice[4]) ||
-  (sorted_dice[0] === sorted_dice[1] &&
-    sorted_dice[1] !== sorted_dice[2] &&
-    sorted_dice[2] === sorted_dice[3] &&
-    sorted_dice[3] === sorted_dice[4])
-    ? (isFullHouse = true)
-    : (isFullHouse = false);
-
+  if (calculateYahtzee(dice_set)) {
+    isFullHouse = true;
+  } else {
+    const sorted_dice = dice_set.map(dice => dice.value).sort();
+    (sorted_dice[0] === sorted_dice[1] &&
+      sorted_dice[1] === sorted_dice[2] &&
+      sorted_dice[2] !== sorted_dice[3] &&
+      sorted_dice[3] === sorted_dice[4]) ||
+    (sorted_dice[0] === sorted_dice[1] &&
+      sorted_dice[1] !== sorted_dice[2] &&
+      sorted_dice[2] === sorted_dice[3] &&
+      sorted_dice[3] === sorted_dice[4])
+      ? (isFullHouse = true)
+      : (isFullHouse = false);
+  }
   return isFullHouse ? 25 : 0;
 };
 
 export const calculateSmallStraight = dice_set => {
-  const sorted_dice = dice_set
-    .map(dice => dice.value)
-    .sort()
-    .filter((item, position, array) => {
-      return !position || item !== array[position - 1];
-    });
   let consecutive_count = 0;
-  sorted_dice.forEach((dice, index) => {
-    index > 0 && dice === sorted_dice[index - 1] + 1
-      ? consecutive_count++
-      : null;
-  });
+  if (calculateYahtzee(dice_set)) {
+    consecutive_count = 4;
+  } else {
+    const sorted_dice = dice_set
+      .map(dice => dice.value)
+      .sort()
+      .filter((item, position, array) => {
+        return !position || item !== array[position - 1];
+      });
+
+    sorted_dice.forEach((dice, index) => {
+      index > 0 && dice === sorted_dice[index - 1] + 1
+        ? consecutive_count++
+        : null;
+    });
+  }
   return consecutive_count >= 3 ? 30 : 0;
 };
 
 export const calculateLargeStraight = dice_set => {
-  const sorted_dice = dice_set.map(dice => dice.value).sort();
   let isLargeStraight = false;
-  (sorted_dice[0] === 1 &&
-    sorted_dice[1] === 2 &&
-    sorted_dice[2] === 3 &&
-    sorted_dice[3] === 4 &&
-    sorted_dice[4] === 5) ||
-  (sorted_dice[0] === 2 &&
-    sorted_dice[1] === 3 &&
-    sorted_dice[2] === 4 &&
-    sorted_dice[3] === 5 &&
-    sorted_dice[4] === 6)
-    ? (isLargeStraight = true)
-    : (isLargeStraight = false);
+  if (calculateYahtzee(dice_set)) {
+    isLargeStraight = true;
+  } else {
+    const sorted_dice = dice_set.map(dice => dice.value).sort();
+    (sorted_dice[0] === 1 &&
+      sorted_dice[1] === 2 &&
+      sorted_dice[2] === 3 &&
+      sorted_dice[3] === 4 &&
+      sorted_dice[4] === 5) ||
+    (sorted_dice[0] === 2 &&
+      sorted_dice[1] === 3 &&
+      sorted_dice[2] === 4 &&
+      sorted_dice[3] === 5 &&
+      sorted_dice[4] === 6)
+      ? (isLargeStraight = true)
+      : (isLargeStraight = false);
+  }
   return isLargeStraight ? 40 : 0;
 };
 
@@ -142,4 +150,23 @@ export const calculateChance = dice_set => {
     0
   );
   return dice_sum;
+};
+
+export const calculateYahtzeeBonus = (lowerResults, yahtzeeCount) => {
+  return lowerResults[5].confirmed && lowerResults[5] > 0
+    ? (yahtzeeCount - 1) * 100
+    : 0;
+};
+
+export const calculateFinalResult = (
+  upperResults,
+  lowerResults,
+  yahtzeeCount
+) => {
+  return (
+    calculateUpperTotal(upperResults) +
+    calculateLowerTotal(lowerResults) +
+    (calculateUpperTotal(upperResults) >= 63 ? 35 : 0) +
+    calculateYahtzeeBonus(lowerResults, yahtzeeCount)
+  );
 };

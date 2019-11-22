@@ -24,6 +24,5 @@ export const lowerSectionInitial = [
   { category: "Small Straight", result: 0, confirmed: false },
   { category: "Large Straight", result: 0, confirmed: false },
   { category: "Yahtzee", result: 0, confirmed: false },
-  { category: "Chance", result: 0, confirmed: false },
-  { category: "Yahtzee Bonus", result: 0, confirmed: false }
+  { category: "Chance", result: 0, confirmed: false }
 ];

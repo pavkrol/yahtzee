@@ -135,7 +135,6 @@ const Dice = ({ value, hold, hold_dice, number }) => {
     <DiceWrapper
       onClick={() => {
         hold_dice(number);
-        console.log(hold);
       }}
       value={value}
       hold={hold}

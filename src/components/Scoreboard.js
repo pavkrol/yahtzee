@@ -1,155 +1,149 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  calculateSumOf,
-  calculateUpperTotal,
-  calculateLowerTotal,
-  calculateFinalResult,
-  calculateThreeOfAKind,
-  calculateFourOfAKind,
-  calculateFullHouse,
-  calculateSmallStraight,
-  calculateLargeStraight,
-  calculateChance,
-  calculateYahtzee
-} from "./helpers";
-import {
-  upperSectionInitial,
-  lowerSectionInitial
-} from "../data/initialValues";
-import Table from "./Table";
+import styled from "styled-components";
 
-const Scoreboard = ({ dice_set, rollCount, updateMoves }) => {
-  const [bonus, setBonus] = useState(0);
-  const [upperTotal, setUpperTotal] = useState(0);
-  const [lowerTotal, setLowerTotal] = useState(0);
-  const [yahtzeeCount, setYahtzeeCount] = useState(0);
-  const [finalResult, setFinalResult] = useState(0);
-  const [scoreConfirmed, toggleScoreConfirmed] = useState(true);
+const TableWrapper = styled.table`
+  border-collapse: collapse;
+  background-color: #fff;
+  color: #000;
+  font-family: "Titillium Web", sans-serif;
+  font-size: 18px;
+  border-radius: 5px;
+  td {
+    border: 1px solid #a8a2a2;
 
-  const [upperResults, dispatch] = useReducer(reducer, upperSectionInitial);
-
-  const [lowerResults, dispatch2] = useReducer(reducer, lowerSectionInitial);
-
-  function reducer(state, action) {
-    switch (action.type) {
-      case "updateUpper":
-        if (!state[action.index].confirmed)
-          state[action.index].result = action.result;
-        return [...state];
-      case "updateLower":
-        if (!state[action.index].confirmed)
-          state[action.index].result = action.result;
-        return [...state];
-      case "confirmScore":
-        state[action.index].confirmed = true;
-        return [...state];
-      default:
-        return [...state];
-    }
+    padding-left: 10px;
   }
+  tr:first-child td {
+    border-top: 0;
+  }
+  tr td:first-child {
+    border-left: 0;
+  }
+  tr:last-child td {
+    border-bottom: 0;
+  }
+  tr td:last-child {
+    border-right: 0;
+    cursor: pointer;
+  }
+`;
 
-  const updateUpperSection = dice_set => {
-    upperResults.forEach((item, index) => {
-      const result = calculateSumOf(dice_set, index + 1);
-      dispatch({
-        type: "updateUpper",
-        index: index,
-        result: result
-      });
-    });
-  };
+const CategoryResult = styled.td`
+  color: ${props => (props.confirmed === true ? "#000" : "#a8a2a2")};
+`;
 
-  const updateLowerSection = dice_set => {
-    dispatch2({
-      type: "updateLower",
-      index: 0,
-      result: calculateThreeOfAKind(dice_set)
-    });
-    dispatch2({
-      type: "updateLower",
-      index: 1,
-      result: calculateFourOfAKind(dice_set)
-    });
-    dispatch2({
-      type: "updateLower",
-      index: 2,
-      result: calculateFullHouse(dice_set)
-    });
-    dispatch2({
-      type: "updateLower",
-      index: 3,
-      result: calculateSmallStraight(dice_set)
-    });
-    dispatch2({
-      type: "updateLower",
-      index: 4,
-      result: calculateLargeStraight(dice_set)
-    });
-    dispatch2({
-      type: "updateLower",
-      index: 5,
-      result: calculateYahtzee(dice_set)
-    });
-    dispatch2({
-      type: "updateLower",
-      index: 6,
-      result: calculateChance(dice_set)
-    });
-  };
+const ResultRow = styled.tr`
+  background-color: #e5e5e5;
+`;
 
-  const confirmScore = (section, index) => {
-    if (section === "upper") {
-      dispatch({
-        type: "confirmScore",
-        index: index
-      });
-    }
-
-    if (section === "lower") {
-      dispatch2({
-        type: "confirmScore",
-        index: index
-      });
-    }
-    toggleScoreConfirmed(!scoreConfirmed);
-  };
-
+const Scoreboard = ({
+  upperResults,
+  upperTotal,
+  lowerResults,
+  lowerTotal,
+  finalResult,
+  updateMoves,
+  confirmScore,
+  yahtzeeBonus,
+  dice_set,
+  updateLowerSection,
+  updateUpperSection,
+  updateResults,
+  scoreConfirmed
+}) => {
   useEffect(() => {
     updateUpperSection(dice_set);
     updateLowerSection(dice_set);
-    calculateFourOfAKind(dice_set);
-    calculateFullHouse(dice_set);
-    calculateSmallStraight(dice_set);
-    calculateLargeStraight(dice_set);
-    calculateYahtzee(dice_set);
-    calculateChance(dice_set);
-  }, [rollCount]);
+  }, [dice_set]);
 
   useEffect(() => {
-    setUpperTotal(calculateUpperTotal(upperResults));
-    setLowerTotal(calculateLowerTotal(lowerResults));
-    setFinalResult(calculateFinalResult(lowerTotal, upperTotal));
+    updateResults();
   }, [scoreConfirmed]);
 
   return (
-    <Table
-      upperResults={upperResults}
-      upperTotal={upperTotal}
-      bonus={bonus}
-      lowerResults={lowerResults}
-      lowerTotal={lowerTotal}
-      finalResult={finalResult}
-      confirmScore={confirmScore}
-      updateMoves={updateMoves}
-    />
+    <TableWrapper>
+      <thead>
+        <tr>
+          <th colSpan="2">Scoreboard</th>
+        </tr>
+      </thead>
+      <tbody>
+        {upperResults.map((item, index) => (
+          <tr key={item.category}>
+            <td>{item.category}</td>
+            <CategoryResult
+              confirmed={item.confirmed}
+              onClick={() => {
+                if (!item.confirmed) {
+                  confirmScore("upper", index, dice_set);
+                  updateMoves();
+                }
+              }}
+            >
+              {item.result}
+            </CategoryResult>
+          </tr>
+        ))}
+        <ResultRow>
+          <td>Total Score</td>
+          <td>{upperTotal}</td>
+        </ResultRow>
+        <ResultRow>
+          <td>Bonus</td>
+          <td>{upperTotal >= 63 ? 35 : 0}</td>
+        </ResultRow>
+        <ResultRow>
+          <td>Total Upper Section</td>
+          <td>{upperTotal + (upperTotal >= 63 ? 35 : 0)}</td>
+        </ResultRow>
+        {lowerResults.map((item, index) => (
+          <tr key={item.category}>
+            <td>{item.category}</td>
+            <CategoryResult
+              confirmed={item.confirmed}
+              onClick={() => {
+                if (!item.confirmed) {
+                  confirmScore("lower", index, dice_set);
+                  updateMoves();
+                }
+              }}
+            >
+              {item.result}
+            </CategoryResult>
+          </tr>
+        ))}
+        <ResultRow>
+          <td>Yahtzee Bonus</td>
+          <td>{yahtzeeBonus}</td>
+        </ResultRow>
+        <ResultRow>
+          <td>Total Lower Section</td>
+          <td>{lowerTotal}</td>
+        </ResultRow>
+        <ResultRow>
+          <td>Final Result</td>
+          <td>{finalResult}</td>
+        </ResultRow>
+      </tbody>
+    </TableWrapper>
   );
 };
 
 export default Scoreboard;
 
 Scoreboard.propTypes = {
-  dice_set: PropTypes.arrayOf(PropTypes.object),
-  rollCount: PropTypes.number,
-  updateMoves: PropTypes.func
+  upperResults: PropTypes.arrayOf(PropTypes.object).isRequired,
+  upperTotal: PropTypes.number.isRequired,
+  lowerResults: PropTypes.arrayOf(PropTypes.object).isRequired,
+  lowerTotal: PropTypes.number.isRequired,
+  finalResult: PropTypes.number.isRequired,
+  confirmScore: PropTypes.func.isRequired,
+  updateMoves: PropTypes.func.isRequired,
+  yahtzeeBonus: PropTypes.number.isRequired,
+  dice_set: PropTypes.arrayOf(PropTypes.object).isRequired,
+  updateLowerSection: PropTypes.func.isRequired,
+  updateUpperSection: PropTypes.func.isRequired,
+  updateResults: PropTypes.func.isRequired,
+  scoreConfirmed: PropTypes.bool.isRequired
 };
