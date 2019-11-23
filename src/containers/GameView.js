@@ -5,10 +5,11 @@ import Dice from "../components/Dice";
 import Scoreboard from "../components/Scoreboard";
 import Logo from "../components/Logo";
 import RollButton from "../components/RollButton";
-import Counters from "../components/Counters";
+import GameOver from "../components/GameOver";
 import wooden_border from "../img/border.png";
 import {
   roll_dice,
+  setPosition,
   calculateSumOf,
   calculateUpperTotal,
   calculateLowerTotal,
@@ -45,8 +46,14 @@ const Board = styled.div`
   border-radius: 10px;
   padding: 50px;
   display: grid;
-  grid-template-columns: 300px repeat(5, 1fr);
-  grid-template-rows: 100px auto;
+  grid-template-columns: 300px repeat(4, 1fr);
+  grid-template-rows: 70px repeat(4, 1fr);
+  grid-template-areas:
+    "scoreboard roll roll roll roll"
+    "scoreboard one two three four"
+    "scoreboard five six seven eight"
+    "scoreboard nine ten eleven twelve"
+    "scoreboard thirteen fourteen fifteen sixteen";
   grid-gap: 20px;
   position: relative;
   :after {
@@ -78,11 +85,13 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
   const [scoreConfirmed, toggleScoreConfirmed] = useState(true);
   const [upperResults, dispatch] = useReducer(reducer, upperSectionInitial);
   const [lowerResults, dispatch2] = useReducer(reducer, lowerSectionInitial);
+  const [isGameOver, setGameOver] = useState(false);
 
   function reducer(state, action) {
     switch (action.type) {
       case "roll":
         state[action.index].value = roll_dice();
+        state[action.index].position = setPosition(state);
         return [...state];
       case "hold":
         state[action.index].hold = !state[action.index].hold;
@@ -207,17 +216,16 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
     setFinalResult(
       calculateFinalResult(upperResults, lowerResults, yahtzeeCount)
     );
+    if (movesLeft === 0) setGameOver(true);
   };
 
   return (
     <GameViewWrapper>
       <Logo />
       <Board image={wooden_border}>
-        <Counters
-          yahtzeeCount={yahtzeeCount}
-          movesLeft={movesLeft}
-          singleMove={singleMove}
-        />
+        <RollButton handleRoll={handleRoll} singleMove={singleMove}>
+          ROLL
+        </RollButton>
         {dice_set.map((dice, index) => (
           <Dice
             hold_dice={hold_dice}
@@ -225,11 +233,11 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
             key={index}
             value={dice.value}
             hold={dice.hold}
+            position={dice.position}
+            rotation={dice.rotation}
           />
         ))}
-        <RollButton handleRoll={handleRoll} singleMove={singleMove}>
-          Roll
-        </RollButton>
+
         <Scoreboard
           dice_set={dice_set}
           updateLowerSection={updateLowerSection}
@@ -247,6 +255,7 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
           scoreConfirmed={scoreConfirmed}
         />
       </Board>
+      {isGameOver && <GameOver finalResult={finalResult} />}
     </GameViewWrapper>
   );
 };

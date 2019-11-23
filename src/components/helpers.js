@@ -27,6 +27,36 @@ export const roll_dice = () => {
   return Math.floor(Math.random() * 6) + 1;
 };
 
+export const setPosition = diceSet => {
+  const areas = [
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "eleven",
+    "twelve",
+    "thirteen",
+    "fourteen",
+    "fifteen",
+    "sixteen"
+  ];
+  const random = Math.floor(Math.random() * 16) + 1;
+  diceSet.forEach(dice => {
+    if (areas[random - 1 === dice.position]) setPosition(diceSet);
+  });
+  return areas[random - 1];
+};
+
+export const setRotation = () => {
+  return Math.floor(Math.random() * 360) + 1;
+};
+
 export const calculateThreeOfAKind = dice_set => {
   const result = dice_set.reduce(function(previous, current) {
     if (current.value in previous) {
@@ -153,7 +183,7 @@ export const calculateChance = dice_set => {
 };
 
 export const calculateYahtzeeBonus = (lowerResults, yahtzeeCount) => {
-  return lowerResults[5].confirmed && lowerResults[5] > 0
+  return lowerResults[5].confirmed && lowerResults[5].result > 0
     ? (yahtzeeCount - 1) * 100
     : 0;
 };

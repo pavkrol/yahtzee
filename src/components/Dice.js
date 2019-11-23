@@ -14,6 +14,8 @@ const DiceWrapper = styled.div`
   border: 2px solid #FFF;
   cursor: pointer;
   justify-self: center;
+  grid-area: ${props => props.position};
+  transform: ${props => `rotate(${props.rotation}deg)`};
   ${props =>
     props.hold &&
     css`
@@ -130,7 +132,7 @@ const DiceWrapper = styled.div`
     }
 `;
 
-const Dice = ({ value, hold, hold_dice, number }) => {
+const Dice = ({ value, hold, hold_dice, number, position, rotation }) => {
   return (
     <DiceWrapper
       onClick={() => {
@@ -138,6 +140,8 @@ const Dice = ({ value, hold, hold_dice, number }) => {
       }}
       value={value}
       hold={hold}
+      position={position}
+      rotation={rotation}
     >
       <div></div>
       <div></div>
@@ -155,5 +159,7 @@ Dice.propTypes = {
   value: PropTypes.number.isRequired,
   hold: PropTypes.bool.isRequired,
   hold_dice: PropTypes.func.isRequired,
-  number: PropTypes.number.isRequired
+  number: PropTypes.number.isRequired,
+  position: PropTypes.string.isRequired,
+  rotation: PropTypes.number.isRequired
 };

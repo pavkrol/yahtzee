@@ -1,11 +1,26 @@
-import { roll_dice } from "../components/helpers";
+import { roll_dice, setRotation } from "../components/helpers";
 
 export const initialDiceValues = [
-  { hold: false, value: roll_dice() },
-  { hold: false, value: roll_dice() },
-  { hold: false, value: roll_dice() },
-  { hold: false, value: roll_dice() },
-  { hold: false, value: roll_dice() }
+  { hold: false, value: roll_dice(), position: "one", rotation: setRotation() },
+  {
+    hold: false,
+    value: roll_dice(),
+    position: "four",
+    rotation: setRotation()
+  },
+  { hold: false, value: roll_dice(), position: "six", rotation: setRotation() },
+  {
+    hold: false,
+    value: roll_dice(),
+    position: "eleven",
+    rotation: setRotation()
+  },
+  {
+    hold: false,
+    value: roll_dice(),
+    position: "thirteen",
+    rotation: setRotation()
+  }
 ];
 
 export const upperSectionInitial = [
