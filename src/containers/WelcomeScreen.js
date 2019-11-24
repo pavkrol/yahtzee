@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Button from "../components/Button";
 import Switch from "../components/Switch";
 import Logo from "../components/Logo";
+import Rules from "../components/Rules";
 
 const WelcomeWrapper = styled.section`
   width: 100%;
@@ -25,6 +26,7 @@ const WelcomeScreen = ({
   extremeDifficulty,
   sequenceGame
 }) => {
+  const [rules, toggleRules] = useState(false);
   return (
     <WelcomeWrapper>
       <Logo />
@@ -45,12 +47,14 @@ const WelcomeScreen = ({
         Game type
       </Switch>
       <Button
-        startGame={() => {
+        action={() => {
           startGame(extremeDifficulty, sequenceGame);
         }}
       >
         Start
       </Button>
+      <Button action={() => toggleRules(!rules)}>How to play</Button>
+      {rules && <Rules closeRules={() => toggleRules(!rules)} />}
     </WelcomeWrapper>
   );
 };

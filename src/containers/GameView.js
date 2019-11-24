@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect } from "react";
+import React, { useReducer, useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Dice from "../components/Dice";
@@ -91,7 +91,7 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
     switch (action.type) {
       case "roll":
         state[action.index].value = roll_dice();
-        state[action.index].position = setPosition(state);
+        //state[action.index].position = setPosition(state);
         return [...state];
       case "hold":
         state[action.index].hold = !state[action.index].hold;

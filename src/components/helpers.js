@@ -48,7 +48,9 @@ export const setPosition = diceSet => {
   ];
   const random = Math.floor(Math.random() * 16) + 1;
   diceSet.forEach(dice => {
-    if (areas[random - 1 === dice.position]) setPosition(diceSet);
+    if (areas[random - 1] === dice.position) {
+      setPosition(diceSet);
+    }
   });
   return areas[random - 1];
 };

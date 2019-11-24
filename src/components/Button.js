@@ -12,11 +12,12 @@ const ButtonWrapper = styled.button`
   background: transparent;
   border: 1px solid #fff;
   border-radius: 10px;
+  margin-bottom: 20px;
 `;
 
-const Button = ({ height, width, children, startGame }) => {
+const Button = ({ height, width, children, action }) => {
   return (
-    <ButtonWrapper onClick={startGame} height={height} width={width}>
+    <ButtonWrapper onClick={action} height={height} width={width}>
       {children}
     </ButtonWrapper>
   );
@@ -27,7 +28,7 @@ export default Button;
 Button.propTypes = {
   height: PropTypes.string,
   width: PropTypes.string,
-  startGame: PropTypes.func.isRequired
+  action: PropTypes.func
 };
 
 Button.defaultProps = {
