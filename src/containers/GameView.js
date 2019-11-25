@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Dice from "../components/Dice";
@@ -10,6 +10,7 @@ import wooden_border from "../img/border.png";
 import {
   roll_dice,
   setPosition,
+  setRotation,
   calculateSumOf,
   calculateUpperTotal,
   calculateLowerTotal,
@@ -74,9 +75,9 @@ const Board = styled.div`
   }
 `;
 
-const GameView = ({ extremeDifficulty, sequenceGame }) => {
+const GameView = ({ extremeDifficulty, startAgain, newGame }) => {
   let [movesLeft, setMoves] = useState(13);
-  let [singleMove, setSingleMove] = useState(2);
+  let [singleMove, setSingleMove] = useState(extremeDifficulty ? 1 : 2);
   const [dice_set, dispatch3] = useReducer(reducer, initialDiceValues);
   const [upperTotal, setUpperTotal] = useState(0);
   const [lowerTotal, setLowerTotal] = useState(0);
@@ -91,7 +92,8 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
     switch (action.type) {
       case "roll":
         state[action.index].value = roll_dice();
-        //state[action.index].position = setPosition(state);
+        state[action.index].position = setPosition(action.index);
+        state[action.index].rotation = setRotation();
         return [...state];
       case "hold":
         state[action.index].hold = !state[action.index].hold;
@@ -107,6 +109,9 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
       case "confirmScore":
         state[action.index].confirmed = true;
         return [...state];
+      case "reset":
+        state[action.index].confirmed = false;
+        state[action.index].result = 0;
       default:
         return [...state];
     }
@@ -169,7 +174,7 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
       dispatch3({ type: "roll", index: index });
     });
     setMoves(movesLeft - 1);
-    setSingleMove(2);
+    setSingleMove(extremeDifficulty ? 1 : 2);
   };
 
   const updateSingleMove = () => {
@@ -219,6 +224,23 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
     if (movesLeft === 0) setGameOver(true);
   };
 
+  useEffect(() => {
+    upperResults.forEach((item, index) =>
+      dispatch({ type: "reset", index: index })
+    );
+    lowerResults.forEach((item, index) =>
+      dispatch2({ type: "reset", index: index })
+    );
+    setYahtzeeCount(0);
+    setGameOver(false);
+    dice_set.forEach((dice, index) =>
+      dispatch3({ type: "roll", index: index })
+    );
+    setUpperTotal(0);
+    setLowerTotal(0);
+    setFinalResult(0);
+  }, [newGame]);
+
   return (
     <GameViewWrapper>
       <Logo />
@@ -255,7 +277,9 @@ const GameView = ({ extremeDifficulty, sequenceGame }) => {
           scoreConfirmed={scoreConfirmed}
         />
       </Board>
-      {isGameOver && <GameOver finalResult={finalResult} />}
+      {isGameOver && (
+        <GameOver finalResult={finalResult} startAgain={startAgain} />
+      )}
     </GameViewWrapper>
   );
 };
@@ -264,5 +288,5 @@ export default GameView;
 
 GameView.propTypes = {
   extremeDifficulty: PropTypes.bool,
-  sequenceGame: PropTypes.bool
+  startAgain: PropTypes.func
 };

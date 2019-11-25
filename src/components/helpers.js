@@ -27,7 +27,7 @@ export const roll_dice = () => {
   return Math.floor(Math.random() * 6) + 1;
 };
 
-export const setPosition = diceSet => {
+export const setPosition = index => {
   const areas = [
     "one",
     "two",
@@ -46,13 +46,9 @@ export const setPosition = diceSet => {
     "fifteen",
     "sixteen"
   ];
-  const random = Math.floor(Math.random() * 16) + 1;
-  diceSet.forEach(dice => {
-    if (areas[random - 1] === dice.position) {
-      setPosition(diceSet);
-    }
-  });
-  return areas[random - 1];
+  const random = Math.floor(Math.random() * 3) + 1;
+  const result = random + 3 * index;
+  return areas[result - 1];
 };
 
 export const setRotation = () => {

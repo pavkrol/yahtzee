@@ -10,14 +10,25 @@ const ButtonWrapper = styled.button`
   height: ${props => props.height};
   width: ${props => props.width};
   background: transparent;
-  border: 1px solid #fff;
+  border: 1px solid
+    ${props => (props.colorScheme === "inverted" ? "#000" : "#fff")};
   border-radius: 10px;
   margin-bottom: 20px;
+  color: ${props => (props.colorScheme === "inverted" ? "#000" : "#fff")};
+  transition: box-shadow 0.2s ease-in-out;
+  :hover {
+    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 1);
+  }
 `;
 
-const Button = ({ height, width, children, action }) => {
+const Button = ({ height, width, children, action, colorScheme }) => {
   return (
-    <ButtonWrapper onClick={action} height={height} width={width}>
+    <ButtonWrapper
+      onClick={action}
+      height={height}
+      width={width}
+      colorScheme={colorScheme}
+    >
       {children}
     </ButtonWrapper>
   );
@@ -28,10 +39,12 @@ export default Button;
 Button.propTypes = {
   height: PropTypes.string,
   width: PropTypes.string,
-  action: PropTypes.func
+  action: PropTypes.func,
+  colorScheme: PropTypes.oneOf(["normal", "inverted"])
 };
 
 Button.defaultProps = {
   height: "50px",
-  width: "150px"
+  width: "150px",
+  colorScheme: "normal"
 };

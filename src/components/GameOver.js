@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Button from "./Button";
 
 const GameOverWrapper = styled.div`
   width: 100%;
@@ -22,23 +23,28 @@ const ResultPopup = styled.div`
   background-color: white;
   border-radius: 10px;
   color: #000;
-  font-family: "Share", sans-serif;
   h2 {
     font-size: 30px;
     font-weight: 500;
     margin-bottom: 30px;
+    font-family: "Open Sans Condensed", sans-serif;
+    font-weight: 700;
   }
   h3 {
     font-size: 24px;
+    font-family: "Open Sans", sans-serif;
   }
 `;
 
-const GameOver = ({ finalResult }) => {
+const GameOver = ({ finalResult, startAgain }) => {
   return (
     <GameOverWrapper>
       <ResultPopup>
         <h2>Congratulations!</h2>
         <h3>{`Your final result is ${finalResult} points.`}</h3>
+        <Button action={startAgain} colorScheme="inverted">
+          Start again
+        </Button>
       </ResultPopup>
     </GameOverWrapper>
   );

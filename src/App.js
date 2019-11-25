@@ -7,13 +7,17 @@ import GameView from "./containers/GameView";
 
 const App = () => {
   const [extremeDifficulty, setDifficulty] = useState(false);
-  const [sequenceGame, setGameType] = useState(false);
+  const [newGame, toggleNewGame] = useState(false);
 
   const toggleDifficulty = () => setDifficulty(!extremeDifficulty);
-  const toggleType = () => setGameType(!sequenceGame);
 
   const startGame = () => {
+    toggleNewGame(!newGame);
     navigate("game");
+  };
+
+  const startAgain = () => {
+    navigate("/");
   };
   return (
     <>
@@ -22,15 +26,14 @@ const App = () => {
         <WelcomeScreen
           path="/"
           extremeDifficulty={extremeDifficulty}
-          sequenceGame={sequenceGame}
           startGame={startGame}
           toggleDifficulty={toggleDifficulty}
-          toggleType={toggleType}
         />
         <GameView
           path="game"
           extremeDifficulty={extremeDifficulty}
-          sequenceGame={sequenceGame}
+          startAgain={startAgain}
+          newGame={newGame}
         />
       </Router>
     </>

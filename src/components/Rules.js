@@ -22,24 +22,35 @@ const RulesContent = styled.article`
   border-radius: 10px;
   color: #000;
   overflow-y: scroll;
-  font-family: "Share", sans-serif;
-  padding: 30px;
+  font-family: "Open Sans", sans-serif;
+  padding: 30px 60px;
   button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    position: fixed;
+    top: top: calc(50% - 40vh + 20px);
+    right: calc(15% + 40px);
+    font-size: 30px;
   }
   h2 {
+    font-family: "Open Sans Condensed", sans-serif;
+    font-weight: 700;
     font-size: 24px;
     margin-bottom: 30px;
   }
   h3 {
+    font-family: "Open Sans Condensed", sans-serif;
+    font-weight: 700;
     font-size: 20px;
     margin-bottom: 15px;
   }
-  p {
+  p, ul {
     font-size: 18px;
     margin-bottom: 30px;
+    span {
+      font-weight: 700;
+    }
+  }
+  li {
+    list-style: disc inside;
   }
 `;
 
@@ -67,53 +78,75 @@ const Rules = ({ closeRules }) => {
         </p>
         <h3>Scoring</h3>
         <p>
-          To score your combination of 5 dice, you click one of the 13 boxes, or
-          write it on the scorecard (scoresheet). There are two sections to the
-          score table - the Upper Section and the Lower Section. Once a box has
-          been scored, it cannot be scored again for the rest of the game
-          (except the Yahtzee category), so choose wisely.
+          To score your combination of 5 dice, you click one of the 13 boxes.
+          There are two sections to the score table - the Upper Section and the
+          Lower Section. Once a box has been scored, it cannot be scored again
+          for the rest of the game, so choose wisely.
         </p>
         <h3>Upper Section Scoring</h3>
         <p>
           If you score in the upper section of the table, your score is the
-          total of the specified die face. So if you roll: 5 - 2 - 5 - 6 - 5 and
-          score in the Fives category, your total for the category would be 15,
-          because there are three fives, which are added together. If the One,
-          Three or Four Categories were selected for scoring with this roll, you
-          would score a zero. If placed in the Two or Six category, you would
-          score 2 and 6 respectively. Bonus If the total of Upper scores is 63
-          or more, add a bonus of 35. Note that 63 is the total of three each of
-          1s, 2s, 3s, 4s, 5s and 6s.
+          total of the specified dice face. So if you roll: 5 - 2 - 5 - 6 - 5
+          and score in the Fives category, your total for the category would be
+          15, because there are three fives, which are added together. If the
+          One, Three or Four Categories were selected for scoring with this
+          roll, you would score a zero. If placed in the Two or Six category,
+          you would score 2 and 6 respectively.
+        </p>
+        <p>
+          <span>Bonus:</span> If the total of Upper scores is 63 or more, add a
+          bonus of 35. Note that 63 is the total of three each of 1s, 2s, 3s,
+          4s, 5s and 6s.
         </p>
         <h3>Lower Section Scoring</h3>
         <p>
           In the lower scores, you score either a set amount, or zero if you
           don't satisfy the category requirements. 3 and 4 of a kind For 3 of a
-          kind you must have at least 3 of the same die faces. You score the
-          total of all the dice. For 4 of a kind you would need 4 die faces the
-          same. Small and Large Straight A Straight is a sequence of consecutive
-          die faces, where a small straight is 4 consecutive faces, and a large
-          straight 5 consecutive faces. Small straights score 30 and a large 40
-          points. So if you rolled: 2 - 3 - 2 - 5 - 4 you could score 30 in
-          small straight or 0 in large straight. Full House A Full House is
-          where you have 3 of a kind and 2 of a kind. Full houses score 25
-          points. i.e.: 3 - 3 - 2 - 3 - 2 would score 25 in the Full House
-          category. First Yahtzee A Yahtzee is 5 of a kind and scores 50 points,
-          although you may elect NOT to score it as a yahtzee, instead choosing
-          to take it as a top row score and safegaurd you bonus. Additional
-          Yahtzees. If you roll a second Yahtzee in a game, and you scored your
-          first yahtzee in the Yahtzee box, you would score a further bonus 100
-          points in the yahtzee box. You must also put this roll into another
-          category, as follows; -If the corresponding Upper section category is
-          not filled then you must score there. ie if you rolled 4 - 4 - 4 - 4 -
-          4 and the Fours Category is not filled, you must put the score in the
-          Fours category. -If the corresponding Upper section category is filled
-          you may then put the score anywhere on the Upper Section (scoring
-          zero). In 3 of a Kind, 4 of a Kind, and Chance categories you would
-          score the total of the die faces. For the Small Straight, Large
-          Straight, and Full House categories, you would score 30, 40 and 25
-          points respectively. Chance You can roll anything and be able to put
-          it in the Chance category. You score the total of the die faces.
+          kind you must have at least 3 of the same dice faces. You score the
+          total of all the dice. For 4 of a kind you would need 4 dice faces the
+          same.
+        </p>
+        <p>
+          <span>Small and Large Straight:</span> A Straight is a sequence of
+          consecutive dice faces, where a small straight is 4 consecutive faces,
+          and a large straight 5 consecutive faces. Small straights score 30 and
+          a large 40 points. So if you rolled: 2 - 3 - 2 - 5 - 4 you could score
+          30 in small straight or 0 in large straight.
+        </p>
+        <p>
+          <span>Full House:</span> A Full House is where you have 3 of a kind
+          and 2 of a kind. Full houses score 25 points. i.e.: 3 - 3 - 2 - 3 - 2
+          would score 25 in the Full House category.
+        </p>
+        <p>
+          <span>First Yahtzee:</span> A Yahtzee is 5 of a kind and scores 50
+          points, although you may elect NOT to score it as a yahtzee, instead
+          choosing to take it as a top row score and safegaurd you bonus.{" "}
+        </p>
+        <p>
+          <span>Additional Yahtzees:</span> If you roll a second Yahtzee in a
+          game, and you scored your first yahtzee in the Yahtzee box, you would
+          score a further bonus 100 points in the yahtzee box. You must also put
+          this roll into another category, as follows:
+        </p>
+        <ul>
+          <li>
+            if the corresponding Upper section category is not filled then you
+            must score there. ie if you rolled 4 - 4 - 4 - 4 - 4 and the Fours
+            Category is not filled, you must put the score in the Fours
+            category,
+          </li>
+          <li>
+            if the corresponding Upper section category is filled you may then
+            put the score anywhere on the Upper Section (scoring zero). In 3 of
+            a Kind, 4 of a Kind, and Chance categories you would score the total
+            of the dice faces. For the Small Straight, Large Straight, and Full
+            House categories, you would score 30, 40 and 25 points respectively.
+          </li>
+        </ul>
+        <p>
+          <span>Chance:</span> You can roll anything and be able to put it in
+          the Chance category. You score the total of the dice faces.
         </p>
         <h3> Scratch or Dump scores</h3>
         <p>

@@ -22,7 +22,6 @@ const WelcomeWrapper = styled.section`
 const WelcomeScreen = ({
   startGame,
   toggleDifficulty,
-  toggleType,
   extremeDifficulty,
   sequenceGame
 }) => {
@@ -30,6 +29,8 @@ const WelcomeScreen = ({
   return (
     <WelcomeWrapper>
       <Logo />
+      <Button action={() => toggleRules(!rules)}>How to play</Button>
+      {rules && <Rules closeRules={() => toggleRules(!rules)} />}
       <Switch
         option1="Normal"
         option2="Extreme"
@@ -38,14 +39,6 @@ const WelcomeScreen = ({
       >
         Difficulty
       </Switch>
-      <Switch
-        option1="Standard"
-        option2="In sequence"
-        isClicked={sequenceGame}
-        switchFunction={toggleType}
-      >
-        Game type
-      </Switch>
       <Button
         action={() => {
           startGame(extremeDifficulty, sequenceGame);
@@ -53,8 +46,6 @@ const WelcomeScreen = ({
       >
         Start
       </Button>
-      <Button action={() => toggleRules(!rules)}>How to play</Button>
-      {rules && <Rules closeRules={() => toggleRules(!rules)} />}
     </WelcomeWrapper>
   );
 };
@@ -64,7 +55,5 @@ export default WelcomeScreen;
 WelcomeScreen.propTypes = {
   startGame: PropTypes.func.isRequired,
   toggleDifficulty: PropTypes.func.isRequired,
-  toggleType: PropTypes.func.isRequired,
-  extremeDifficulty: PropTypes.bool.isRequired,
-  sequenceGame: PropTypes.bool.isRequired
+  extremeDifficulty: PropTypes.bool.isRequired
 };
