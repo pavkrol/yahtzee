@@ -11,7 +11,6 @@ const TableWrapper = styled.table`
   border-radius: 5px;
   td {
     border: 1px solid #a8a2a2;
-
     padding-left: 10px;
   }
   tr:first-child td {
@@ -25,6 +24,7 @@ const TableWrapper = styled.table`
   }
   tr td:last-child {
     border-right: 0;
+    padding-right: 5px;
     cursor: pointer;
   }
   @media (max-width: 600px) {
