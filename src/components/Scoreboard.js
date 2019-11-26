@@ -27,6 +27,9 @@ const TableWrapper = styled.table`
     border-right: 0;
     cursor: pointer;
   }
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
 `;
 
 const CategoryResult = styled.td`

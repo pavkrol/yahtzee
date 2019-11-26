@@ -33,10 +33,13 @@ import {
 const GameViewWrapper = styled.section`
   padding: 40px 0;
   background: radial-gradient(50% 50% at 50% 50%, #1e5c94 0%, #223b52 100%);
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: 600px) {
+    padding: 10px 0 20px 0;
+  }
 `;
 
 const Board = styled.div`
@@ -70,8 +73,30 @@ const Board = styled.div`
     pointer-events: none;
   }
   table {
-    grid-column: 1 / 2;
-    grid-row: 1 / 3;
+    grid-area: scoreboard;
+  }
+  @media (max-width: 1000px) {
+    width: 90%;
+  }
+  @media (max-width: 800px) {
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: 70px repeat(5, 1fr);
+    grid-template-areas:
+      "scoreboard roll"
+      "scoreboard one"
+      "scoreboard two"
+      "scoreboard three"
+      "scoreboard four"
+      "scoreboard five";
+  }
+  @media (max-width: 600px) {
+    grid-template-columns: 220px 1fr;
+    padding: 50px 25px;
+    min-height: 490px;
+  }
+  @media (max-width: 500px) {
+    grid-template-columns: 170px 1fr;
+    padding: 50px 25px;
   }
 `;
 

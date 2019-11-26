@@ -51,6 +51,7 @@ const DiceWrapper = styled.div`
       grid-template-columns: 1fr 1fr 1fr;
       grid-template-rows: 1fr 1fr;
     `}
+  }
   div {
     display: none;
     background-color: #000;
@@ -129,6 +130,17 @@ const DiceWrapper = styled.div`
         display: block;
       `}
     
+    }
+    @media (max-width: 600px) {
+      width: 52px;
+      height: 52px;
+      padding: 7px;
+      grid-gap: 7px;
+      border-radius: 7px;
+      div {
+        width: 7px;
+        height: 7px;
+      }
     }
 `;
 

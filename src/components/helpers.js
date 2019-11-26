@@ -46,9 +46,15 @@ export const setPosition = index => {
     "fifteen",
     "sixteen"
   ];
+  const mediaQuery = window.matchMedia("(max-width: 800px)");
   const random = Math.floor(Math.random() * 3) + 1;
-  const result = random + 3 * index;
-  return areas[result - 1];
+  let result = 0;
+  if (mediaQuery.matches) {
+    result = index;
+  } else {
+    result = random + 3 * index - 1;
+  }
+  return areas[result];
 };
 
 export const setRotation = () => {

@@ -24,6 +24,18 @@ const LogoWrapper = styled.div`
     line-height: 27px;
     margin-bottom: 50px;
   }
+  @media (max-width: 600px) {
+    margin-left: 10%;
+    h1 {
+      font-size: 40px;
+      line-height: 45px;
+    }
+    h2 {
+      font-size: 18px;
+      line-height: 20px;
+      margin-bottom: 25px;
+    }
+  }
 `;
 
 const Logo = () => {

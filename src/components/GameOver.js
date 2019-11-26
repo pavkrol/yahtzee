@@ -33,6 +33,21 @@ const ResultPopup = styled.div`
   h3 {
     font-size: 24px;
     font-family: "Open Sans", sans-serif;
+    margin-bottom: 30px;
+  }
+  @media (max-width: 600px) {
+    width: 85%;
+    height: 300px;
+    top: calc(50% - 150px);
+    left: 7.5%;
+    h2 {
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
   }
 `;
 

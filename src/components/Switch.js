@@ -10,10 +10,19 @@ const SwitchWrapper = styled.div`
   height: 80px;
   font-family: "Share", sans-serif;
   margin-bottom: 20px;
+  flex-wrap: wrap;
   cursor: pointer;
   h3 {
     font-size: 24px;
     margin-right: auto;
+  }
+  @media (max-width: 600px) {
+    height: 100px;
+    justify-content: space-around;
+    h3 {
+      width: 100%;
+      text-align: center;
+    }
   }
 `;
 
@@ -77,6 +86,9 @@ const Tooltip = styled.div`
     top: calc(50% - 5px);
     visibility: visible;
     opacity: 1;
+  }
+  @media (max-width: 1000px) {
+    display: none;
   }
 `;
 

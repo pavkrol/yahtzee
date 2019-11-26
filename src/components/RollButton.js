@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 const RollButtonWrapper = styled.button`
-  grid-column: span 4;
+  grid-area: roll;
   align-self: start;
   justify-self: center;
   display: inline-block;

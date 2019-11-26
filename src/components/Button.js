@@ -17,7 +17,8 @@ const ButtonWrapper = styled.button`
   color: ${props => (props.colorScheme === "inverted" ? "#000" : "#fff")};
   transition: box-shadow 0.2s ease-in-out;
   :hover {
-    box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 1);
+    box-shadow: 0px 0px 10px 0px
+      ${props => (props.colorScheme === "inverted" ? "#B4B4B4" : "#fff")};
   }
 `;
 

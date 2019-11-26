@@ -24,9 +24,10 @@ const RulesContent = styled.article`
   overflow-y: scroll;
   font-family: "Open Sans", sans-serif;
   padding: 30px 60px;
+  z-index: 10;
   button {
     position: fixed;
-    top: top: calc(50% - 40vh + 20px);
+    top: calc(50% - 40vh + 20px);
     right: calc(15% + 40px);
     font-size: 30px;
   }
@@ -42,7 +43,8 @@ const RulesContent = styled.article`
     font-size: 20px;
     margin-bottom: 15px;
   }
-  p, ul {
+  p,
+  ul {
     font-size: 18px;
     margin-bottom: 30px;
     span {
@@ -51,6 +53,14 @@ const RulesContent = styled.article`
   }
   li {
     list-style: disc inside;
+  }
+  @media (max-width: 800px) {
+    width: 85%;
+    padding: 30px;
+    left: 7.5%;
+    button {
+      right: calc(7.5% + 30px);
+    }
   }
 `;
 
