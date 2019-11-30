@@ -137,7 +137,7 @@ export const calculateSmallStraight = dice_set => {
     sorted_dice.forEach((dice, index) => {
       index > 0 && dice === sorted_dice[index - 1] + 1
         ? consecutive_count++
-        : null;
+        : (consecutive_count = 0);
     });
   }
   return consecutive_count >= 3 ? 30 : 0;
