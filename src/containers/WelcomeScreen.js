@@ -5,6 +5,7 @@ import Button from "../components/Button";
 import Switch from "../components/Switch";
 import Logo from "../components/Logo";
 import Rules from "../components/Rules";
+import Highscores from "../components/Highscores";
 
 const WelcomeWrapper = styled.section`
   width: 100%;
@@ -46,6 +47,7 @@ const WelcomeScreen = ({
       >
         Start
       </Button>
+      <Highscores />
     </WelcomeWrapper>
   );
 };
