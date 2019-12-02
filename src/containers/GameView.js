@@ -100,7 +100,12 @@ const Board = styled.div`
   }
 `;
 
-const GameView = ({ extremeDifficulty, startAgain, newGame }) => {
+const GameView = ({
+  extremeDifficulty,
+  startAgain,
+  newGame,
+  goToHighscores
+}) => {
   let [movesLeft, setMoves] = useState(13);
   let [singleMove, setSingleMove] = useState(extremeDifficulty ? 1 : 2);
   const [dice_set, dispatch3] = useReducer(reducer, initialDiceValues);
@@ -303,7 +308,11 @@ const GameView = ({ extremeDifficulty, startAgain, newGame }) => {
         />
       </Board>
       {isGameOver && (
-        <GameOver finalResult={finalResult} startAgain={startAgain} />
+        <GameOver
+          finalResult={finalResult}
+          startAgain={startAgain}
+          goToHighscores={goToHighscores}
+        />
       )}
     </GameViewWrapper>
   );

@@ -4,6 +4,7 @@ import { Router, navigate } from "@reach/router";
 import GlobalStyle from "./layout/GlobalStyle";
 import WelcomeScreen from "./containers/WelcomeScreen";
 import GameView from "./containers/GameView";
+import HighscoresView from "./containers/HighscoresView";
 
 const App = () => {
   const [extremeDifficulty, setDifficulty] = useState(false);
@@ -19,6 +20,11 @@ const App = () => {
   const startAgain = () => {
     navigate("/");
   };
+
+  const goToHighscores = () => {
+    navigate("highscores");
+  };
+
   return (
     <>
       <GlobalStyle />
@@ -28,13 +34,16 @@ const App = () => {
           extremeDifficulty={extremeDifficulty}
           startGame={startGame}
           toggleDifficulty={toggleDifficulty}
+          goToHighscores={goToHighscores}
         />
         <GameView
           path="game"
           extremeDifficulty={extremeDifficulty}
           startAgain={startAgain}
           newGame={newGame}
+          goToHighscores={goToHighscores}
         />
+        <HighscoresView path="highscores" startAgain={startAgain} />
       </Router>
     </>
   );

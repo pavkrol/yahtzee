@@ -5,7 +5,6 @@ import Button from "../components/Button";
 import Switch from "../components/Switch";
 import Logo from "../components/Logo";
 import Rules from "../components/Rules";
-import Highscores from "../components/Highscores";
 
 const WelcomeWrapper = styled.section`
   width: 100%;
@@ -24,7 +23,8 @@ const WelcomeScreen = ({
   startGame,
   toggleDifficulty,
   extremeDifficulty,
-  sequenceGame
+  sequenceGame,
+  goToHighscores
 }) => {
   const [rules, toggleRules] = useState(false);
   return (
@@ -32,6 +32,7 @@ const WelcomeScreen = ({
       <Logo />
       <Button action={() => toggleRules(!rules)}>How to play</Button>
       {rules && <Rules closeRules={() => toggleRules(!rules)} />}
+      <Button action={goToHighscores}>Highscores</Button>
       <Switch
         option1="Normal"
         option2="Extreme"
@@ -47,7 +48,6 @@ const WelcomeScreen = ({
       >
         Start
       </Button>
-      <Highscores />
     </WelcomeWrapper>
   );
 };
