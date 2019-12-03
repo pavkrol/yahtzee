@@ -5,7 +5,7 @@ import { firestore } from "../data/firebase";
 
 const GameOverWrapper = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   position: fixed;
   background-color: rgba(0, 0, 0, 0.7);
   top: 0;
@@ -13,7 +13,7 @@ const GameOverWrapper = styled.div`
 
 const ResultPopup = styled.div`
   width: 70%;
-  height: 500px;
+  min-height: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -65,11 +65,12 @@ const ResultPopup = styled.div`
     top: 10vh;
     left: 7.5%;
     h2 {
-      font-size: 24px;
+      font-size: 22px;
       margin-bottom: 15px;
     }
-    h3 {
-      font-size: 18px;
+    h3,
+    p {
+      font-size: 16px;
       margin-bottom: 15px;
     }
     form {
