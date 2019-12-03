@@ -61,7 +61,7 @@ const ResultPopup = styled.div`
 
   @media (max-width: 600px) {
     width: 85%;
-    height: 80vh;
+    min-height: 80vh;
     top: 10vh;
     left: 7.5%;
     h2 {
