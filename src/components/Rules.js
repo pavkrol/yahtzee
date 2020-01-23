@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -8,6 +8,10 @@ const RulesWrapper = styled.div`
   position: fixed;
   background-color: rgba(0, 0, 0, 0.7);
   top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 const RulesContent = styled.article`
   width: 70%;
@@ -15,20 +19,18 @@ const RulesContent = styled.article`
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  top: calc(50% - 40vh);
-  left: 15%;
+  position: relative;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 6px;
   color: #000;
   overflow-y: scroll;
   font-family: "Open Sans", sans-serif;
   padding: 30px 60px;
   z-index: 10;
   button {
-    position: fixed;
-    top: calc(50% - 40vh + 20px);
-    right: calc(15% + 40px);
+    position: absolute;
+    top: 15px;
+    right: 15px;
     font-size: 30px;
   }
   h2 {
@@ -57,14 +59,15 @@ const RulesContent = styled.article`
   @media (max-width: 800px) {
     width: 85%;
     padding: 30px;
-    left: 7.5%;
-    button {
-      right: calc(7.5% + 30px);
-    }
   }
 `;
 
 const Rules = ({ closeRules }) => {
+  useEffect(() => {
+    document.body.style.overflowY = "hidden";
+    return () => (document.body.style.overflowY = "unset");
+  }, []);
+
   return (
     <RulesWrapper>
       <RulesContent>

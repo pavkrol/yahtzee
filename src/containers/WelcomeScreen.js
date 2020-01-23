@@ -15,7 +15,7 @@ const WelcomeWrapper = styled.section`
   justify-content: center;
   align-items: center;
   button:last-child {
-    margin-top: s50px;
+    margin-top: 50px;
   }
 `;
 

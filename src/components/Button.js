@@ -6,9 +6,10 @@ const ButtonWrapper = styled.button`
   font-size: 22px;
   font-family: "Share", sans-serif;
   text-align: center;
+  padding: 0 15px;
   line-height: ${props => props.height};
   height: ${props => props.height};
-  width: ${props => props.width};
+  min-width: ${props => props.width};
   background: transparent;
   border: 1px solid
     ${props => (props.colorScheme === "inverted" ? "#000" : "#fff")};

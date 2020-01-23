@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "./Button";
 import { firestore } from "../data/firebase";
@@ -6,9 +6,13 @@ import { firestore } from "../data/firebase";
 const GameOverWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
-  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgba(0, 0, 0, 0.7);
   top: 0;
+  left: 0;
+  position: fixed;
 `;
 
 const ResultPopup = styled.div`
@@ -18,9 +22,6 @@ const ResultPopup = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: calc(50% - 250px);
-  left: 15%;
   padding: 20px 30px;
   background-color: white;
   border-radius: 10px;
@@ -50,20 +51,19 @@ const ResultPopup = styled.div`
       border-radius: 8px;
       height: 35px;
       margin-right: 20px;
-      padding: 0 20px;
+      padding: 7px 20px;
       font-size: 18px;
       font-family: "Open Sans", sans-serif;
     }
     button {
       font-size: 18px;
+      background-color: #75a2cb50;
     }
   }
 
   @media (max-width: 600px) {
     width: 85%;
     min-height: 80vh;
-    top: 10vh;
-    left: 7.5%;
     h2 {
       font-size: 22px;
       margin-bottom: 15px;
@@ -74,9 +74,11 @@ const ResultPopup = styled.div`
       margin-bottom: 15px;
     }
     form {
-      justify-content: space-between;
+      flex-direction: column;
       input {
         flex: 1;
+        height: 35px;
+        margin-right: 0;
       }
     }
   }
@@ -90,6 +92,11 @@ const GameOver = ({ finalResult, startAgain, goToHighscores }) => {
     const result = { name: name, result: score };
     await firestore.collection("normalDifficulty").add(result);
   };
+
+  useEffect(() => {
+    document.body.style.overflowY = "hidden";
+    return () => (document.body.style.overflowY = "unset");
+  }, []);
 
   return (
     <GameOverWrapper>

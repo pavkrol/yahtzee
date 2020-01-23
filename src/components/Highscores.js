@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { firestore } from "../data/firebase";
 import HighscoresTable from "./HighscoresTable";
 import Button from "./Button";
+import Loader from "./Loader";
 
 const HighscoresWrapper = styled.div`
   width: 60%;
@@ -50,7 +51,8 @@ const HighscoresWrapper = styled.div`
 class Highscores extends Component {
   state = {
     resultsNormal: [],
-    resultsExtreme: []
+    resultsExtreme: [],
+    isDataLoading: true
   };
 
   componentDidMount = async () => {
@@ -74,16 +76,28 @@ class Highscores extends Component {
     }));
     this.setState({ resultsExtreme });
     this.setState({ resultsNormal });
+    this.setState({ isDataLoading: false });
   };
 
   render() {
-    const { resultsNormal, resultsExtreme } = this.state;
+    const { resultsNormal, resultsExtreme, isDataLoading } = this.state;
 
     return (
       <HighscoresWrapper>
         <h2>Highscores</h2>
-        <HighscoresTable results={resultsNormal} header="Normal Difficulty" />
-        <HighscoresTable results={resultsExtreme} header="Extreme Difficulty" />
+        {isDataLoading ? (
+          <Loader />
+        ) : (
+          <HighscoresTable results={resultsNormal} header="Normal Difficulty" />
+        )}
+        {isDataLoading ? (
+          <Loader />
+        ) : (
+          <HighscoresTable
+            results={resultsExtreme}
+            header="Extreme Difficulty"
+          />
+        )}
         <Button action={this.props.startAgain}>Main screen</Button>
       </HighscoresWrapper>
     );
