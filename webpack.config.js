@@ -1,4 +1,5 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const CreateFileWebpack = require("create-file-webpack");
 const path = require("path");
 
 module.exports = {
@@ -46,6 +47,11 @@ module.exports = {
       template: "./src/index.html",
       filename: "./index.html",
       favicon: "./src/img/dice.png"
+    }),
+    new CreateFileWebpack({
+      path: "./dist",
+      fileName: "_redirects",
+      content: "/* /index.html 200"
     })
   ]
 };
